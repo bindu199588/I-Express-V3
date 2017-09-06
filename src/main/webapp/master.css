@@ -1,0 +1,44 @@
+@import url("css/adminDashboard.css");
+@import url("css/adminLogin.css");
+@import url("css/userDashboard.css");
+@import url("css/userLogin.css");
+@import url("css/userPostScreen.css");
+@import url("css/iexpressLoader.css");
+@import url("css/iexpressHeader.css");
+
+@font-face {
+  font-family: "Raleway-Thin";
+  font-style: normal;
+  src:url("fonts/Raleway-Thin.ttf");
+}
+@font-face {
+  font-family: "Raleway-Bold";
+  font-style: normal;
+  src:url("fonts/Raleway-Bold.ttf");
+}
+@font-face {
+  font-family: "Raleway-Regular";
+  font-style: normal;
+  src:url("fonts/Raleway-Regular.ttf");
+}
+@font-face {
+  font-family: "Raleway-SemiBold";
+  font-style: normal;
+  src:url("fonts/Raleway-SemiBold.ttf");
+}
+
+.bodyContainer{
+	overflow-x: hidden;
+    background-color: #fff;
+    color: #868686;
+    font-family: Raleway-Regular;
+}
+
+.mainContainer{
+	padding:10px;
+	height: calc(100vh - 80px);
+}
+
+a{
+	text-decoration: none;
+}

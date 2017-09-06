@@ -1,0 +1,654 @@
+@font-face {
+  font-family: "Montserrat-Bold";
+  src:url("../fonts/Montserrat-Bold.ttf");
+}
+@font-face {
+  font-family: "Montserrat-Regular";
+  src:url("../fonts/Montserrat-Regular.ttf");
+}
+@font-face {
+  font-family: "PoiretOne-Regular";
+  src:url("../fonts/PoiretOne-Regular.ttf");
+}
+@font-face {
+  font-family: "Raleway-Thin";
+  font-style: normal;
+  src:url("fonts/Raleway-Thin.ttf");
+}
+@font-face {
+  font-family: "Raleway-Bold";
+  font-style: normal;
+  src:url("fonts/Raleway-Bold.ttf");
+}
+@font-face {
+  font-family: "Raleway-Regular";
+  font-style: normal;
+  src:url("fonts/Raleway-Regular.ttf");
+}
+@font-face {
+  font-family: "Raleway-SemiBold";
+  font-style: normal;
+  src:url("fonts/Raleway-SemiBold.ttf");
+}
+html,body{
+  height:100%;
+  overflow:hidden;
+  font-family: Raleway-Regular,sans-serif !important;
+  /*font-size:  62.5%;*/
+}
+
+.base-color, .btn-floating, .modal-window .modal-header, .btn-red{
+  background-color: #e6323b !important;
+  color:  #fff !important;
+}
+.bas-contrast-color{
+  background-color: #dfdfdf;
+  color: #868686;
+}
+.white-color-bg, .bar-header, .bar-header button, .bar-stable, .title{
+  background-color: #fff;
+}
+
+.side-menu-list ion-item, .side-menu-list ion-item .item-content, .side-menu-list{
+  background-color: rgba(255,255,255,0.6);
+}
+
+.list .item{
+  width:100%;
+}
+
+.side-menu-list{
+  border: none;
+  padding: 0;
+}
+
+.side-menu-list ion-item, .side-menu-list ion-item .item-content{
+  border: none;
+  color: #868686;
+  font-size: 20px !important;
+  padding-left: 50px;
+}
+
+.menu-icon{
+  font-size: 22px;
+  padding-right: 8px;
+  margin-top: 1px;
+}
+
+.menu .item i{
+  margin-right: 5px;
+  margin-top: -px;
+  font-size: 28px;
+  position: absolute;
+  left: 10px;
+  color: #e6323b;
+}
+
+
+
+.bar-stable .button.button-icon{
+  background:  none;
+  border-radius: 50%;
+  border: solid 1px #e6323b;
+  font-weight:  200;
+  height: 34px;
+  width: 34px;
+}
+
+.bar-stable .button.button-clear{
+  background:  none;
+  box-shadow: none;
+  color: #e6323b;
+  font-size: 13px;
+  font-weight: 200;
+}
+
+
+.bar{
+  border-bottom: none;
+  border-bottom-width: 0;
+  background-color: #fff !important;
+  transition: all 0.5s linear;
+}
+
+.bar .title{
+  left: 40px !important;
+  font-size: 22px !important;
+}
+
+
+.bar.scrollshadow {
+  box-shadow:  0 0 10px rgba(0,0,0,0.4) !important;
+}
+/**************************************/
+/**********    LOGIN   ****************/
+/**************************************/
+
+@media (max-width: 768px) {
+  html,body{
+    /*font-size: 50%;*/
+  }
+}
+
+.input-container svg{
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  overflow: visible;
+}
+
+.svg-icon{
+  cursor: pointer;
+}
+
+.input-container .svg-icon path{
+  stroke: #e6323b;
+  fill: none;
+  stroke-width :1;
+}
+
+input, button{
+  outline: none;
+  border: none;
+}
+
+.demo{
+  font-family: "Open Sans", Helvetica, Arial, sans-serif;
+  height: 50rem;
+}
+
+.logo{
+  text-align: center;
+  height: 100px;
+  margin-top: 60px;
+}
+
+.login__form{
+  position: absolute;;
+  width: 100%;
+  height: 50%;
+  padding: 1.5rem 2.5rem;
+}
+
+.login__row{
+  padding-top: 1rem;
+  border-bottom: 1px solid rgba(255,255,255,0.2);
+}
+
+.login__icon{
+  float: left;
+  margin-top: 6px;
+  margin-left: 15px;
+}
+
+.login__icon.name path{
+  stroke-dasharray: 73.50196075439453;
+  stroke-dashoffset: 73.50196075439453;
+  animation: animatePath 2s 0.5s forwards;
+}
+
+.login__icon.pass path{
+  stroke-dasharray: 92.10662841796875;
+  stroke-dashoffset: 92.10662841796875;
+  animation: animatePath 2s 0.5s forwards;
+}
+
+.login__input{
+  display: inline-block !important;
+  width: 22rem;
+  height: 100%;
+  padding-left: 1.5rem;
+  font-size: 1.5rem;
+  background: transparent;
+  color: #FDFCFD;
+}
+
+.login__submit{
+  position: relative;
+  width: 80%;
+  height: 40px;
+  margin: 5rem 0 2.2rem;
+  color: rgba(255, 255,255,0.8);
+  background: #e6323b;
+  font-size: 16px;
+  border-radius: 20px;
+  cursor: pointer;;
+  overflow: hidden;
+  transition: width 0.3s 0.15s, font-size 0.1s 0.15s;
+}
+
+
+.login__submit:after{
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -18px;
+  margin-top: -18px;
+  width: 36px;
+  height: 36px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  border-left: none;
+  border-bottom: none;
+  transition: opacity 0.1s 0.4s;
+  opacity: 0;
+}
+
+.login__submit.processing{
+  width: 40px;
+  font-size: 0;
+}
+.login__submit.processing:after{
+  opacity: 1;
+  animation: rotate 0.5s 0.4s infinite linear;
+}
+
+.login__submit.success{
+  transition: transform 0.3s 0.1s ease-out, opacity 0.1s 0.3s, background-color 0.1s 0.3s;
+  transform: scale(30);
+  opacity: 0.9;
+}
+
+.login__submit.success:after{
+  transition: opacity 0.1s 0s;
+  opacity:0;
+  animation:none;
+}
+
+.login__signup{
+  font-size: 1.2rem;
+  color: #ABA8AE;
+}
+
+.login__signup a{
+  color: #ff;
+  cursor: pointer;
+}
+
+.app__logout{
+  position: absolute;
+  bottom: 3.3rem;
+  right: 3.3rem;
+  width: 4.6rem;
+  height: 4.6rem;
+  margin-right: -2.3rem;
+  margin-bottom: -2.3rem;
+  background: #FC3768;
+  color: #fff;
+  font-size: 2rem;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: bottom 0.4s 0.1s, right 0.4s 0.1s, transform 0.4s 0.4s, opacity 0.1s 0.7s, background-color 0.1s 0.7s;
+}
+
+.app__logout.clicked{
+  bottom: 50$;
+  right: 50%;
+  transform:scale(30) !important;
+  opacity: 1;
+}
+
+.app__logout.clicked svg{
+  opacity: 0;
+}
+
+.app__logout-icon{
+  position: absolute;
+  width: 15rem;
+  height: 15rem;
+  margin-left: -7.5rem;
+  margin-top: -7.5rem;
+  background: rgba(0, 0, 0, 0.4);
+  transform: scale(0);
+  animation: animRipple 0.4s;
+  border-radius: 50%;
+}
+
+@keyframes animRipple {
+  to{
+    transform: scale(3.5);
+    opacity: 0
+  }
+}
+
+@keyframes rotate {
+  to{
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes animatePath {
+  to{
+    stroke-dashoffset:  0;
+  }
+}
+
+.login-box{
+  display: block;
+  height: 100%;
+  z-index:10;
+}
+
+.login-bg-box{
+  position: absolute;
+  background-repeat: no-repeat;
+  background-position: center;;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  content: '';
+  z-index: -1;
+}
+
+.login-bg-color{
+  width: 100%;
+  height: 100%;
+}
+
+.login-box-top, .home-box-top{
+  height: 40%;
+  position: relative;
+}
+
+.login-box-top{
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 240px 110px;
+  display: block;
+  background-image: url('../img/techday-logo.png');
+  background-repeat: no-repeat;
+  background-size: 70% 40%;
+  background-position: center;
+}
+
+.login-box-bottom, .home-box-bottom{
+  height: 60%;
+  z-index: 4;
+}
+
+.login-box-bottom .form-box input , .register-box-bottom .form-box input{
+  width: 100%;
+  display: block;
+  padding: 0 10px 5px 10px;
+  border: solid 1px #fff;
+  background-color: transparent;
+  border-radius: 20px;
+  color: rgba(0, 0, 0, 0.4);
+  height: 40px;
+  float: left;
+  font-size: 20px;
+}
+
+.login-box-bottom .form-box input:focus, .login-box .form-box input:valid, .register-box-bottom .form-box input:focus,  .register-box .form-box input:valid{
+  box-shadow: none;
+  outline: none;
+  background-position: 0  0;
+}
+
+.login-box-bottom .form-box input::-webkit-input-placeholder, .map-search-bar form input::-webkit-input-placeholder{
+  color: #adadad !important;
+  font-size: 16px;
+}
+
+.login-box-bottom .form-box input:focus::-webkit-input-placeholder, .login-box-bottom .form-box input:valid::-webkit-input-placeholder,
+.register-box-bottom .form-box input:focus::-webkit-input-placeholder,  .register-box-bottom .form-box input:valid::-webkit-input-placeholder{
+  color: #adadad !important;
+  -webkit-transform: translateY(-30px);
+  -transform: translateY(-30px);
+  visibility: visible !important;
+}
+
+
+.form-box .input-container{
+  width: 100%;
+  display: block;
+  height: 40px;
+  border: solid 1px #dfdfdf;
+  border-radius: 20px;
+
+}
+
+form .error{
+  display: none;
+  color: #EDEDED;
+}
+
+.button-container{
+  padding-top: 30px;
+  text-align: center;
+}
+
+.btn-submit{
+  border: none;
+  cursor: pointer;
+  border-radius: 100px;
+  padding: 8px 2px;
+  width: 120px;
+  margin-left: auto;
+  margin-right: auto;
+  text-transform: uppercase;
+  clear: both;
+  font-size: 16px;
+}
+
+.login-box-bottom .form-box .btn-submit{
+  background-color: #fff !important;
+  color: #0B8EFF;
+}
+
+.link-signup{
+  margin-top: 20px;
+  margin-left: auto;
+  margin-right: auto;;
+  color: #FFF;
+  display: inline-block;;
+  text-decoration: underline;;
+  font-size: 14px;
+  padding: 1px 25px;
+}
+.itemBox{
+  width: 100%;
+  height: 130px;
+  display: table;
+  box-shadow: 0px 0px 5px 3px #dadada;
+  background-color: #E4343D;
+}
+
+.itemBoxLeft .itemBoxRight{
+  height: 100%;
+  display: table-cell;
+}
+
+.itemBoxLeft{
+  width: 30%;
+  background-color: #E4343D;
+  color: #FFF;
+  text-align: center;
+  font-size: 20px;
+  white-space: normal;;
+  vertical-align: middle;
+  position: relative;;
+}
+.itemBoxLeft div{
+  width: 100%;
+  color: #fff;
+  margin-top: 5px;
+}
+
+.itemBox .itemDateBox{
+  margin-top: 0;
+  position: absolute;
+  top: 0 ;
+  color: #FFF;
+  width: 100%;
+  text-align: center;
+  background-color: rgba(0 ,0,0,0.1);
+  font-family: 'PoiretOne-Regular',cursive;
+  padding: 7px 5px;
+
+}
+
+.itemDateBox1{
+  display: none;
+}
+
+.itemBoxRight{
+  width: 70%;
+  background-color: #dfdfdf;
+  color: #868686;
+  padding-left: 20px;
+  padding-right: 20px;
+  white-space: normal;
+}
+
+.iteDetailBox{
+  width: 100%;
+  color: #FFF;
+  padding-left: 20px;
+  white-space: normal;;
+  float: left;
+  margin-top: 60px;
+}
+
+.itemTitle{
+  font-size: 17px;
+  white-space: normal;
+}
+
+.locationTextBox{
+  font-size: 12px;
+  width: 100%;
+  float: left;
+  margin-top: 20px;
+}
+
+.locationText{
+  width: 100%;
+}
+
+.mapBox .feedBackBox{
+  width: 100%;
+  height: 160px;
+  background-color: #ddd;
+  text-align: center;
+  font-size: 46px;
+  box-shadow: 0px 0px -1px 3px #AAA;
+  margin-top: 20px;
+  padding-top: 30px
+}
+
+.error{
+  margin-top: 10px;
+  display: none;
+  color: #E4343D;
+}
+
+.userCircle{
+  width: 120px;
+  height: 12px;
+  margin: 30px auto 10px auto;
+  border: solid 2px #fff;
+  border-radius: 50%;
+}
+
+
+.userCircle .glyphicon{
+  font-size: 52px;
+  color: #FFF;
+  margin-left: 33px;
+  margin-top: 28px;
+}
+
+#menuUsername{
+  color: #fff;
+  width: 100%;
+  height: 30px;
+  text-align: center;
+  font-size: 20px;
+}
+
+
+.user-box{
+  padding: 50px 0px 50px 20px !important;
+  background-color: rgba(240, 240, 240, 0.8)!important;
+}
+
+.user-box .menu-user-welcom-text{
+  color: #e6323b;
+  font-size: 22px
+}
+.user-box .menu-user-welcom-text i{
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  line-height: 40px;
+  text-align: center;
+  margin-right: 5px;
+  background-color: #e6323b;
+  color: #fff;
+}
+
+.user-box .menu-user-name{
+  color: #e6323b;
+  font: 22px;
+  margin-left: 45px;
+}
+
+.menu-bottom-icon{
+  position: absolute;
+  bottom: 10px;
+  left: 0;
+  right: 0;
+  margin: auto;
+  width: 80px;
+  height: 40px;
+  background-image: url('../img/techday-logo-trans.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+}
+
+
+
+/*********************************************/
+/*************** waves effect ****************/
+/*********************************************/
+
+
+.waves-effect{
+  position: relative;
+  cursor: pointer;
+  display: inline-block;
+  overflow: hidden;
+  -wekit-user-select: none;
+  -moz-user-select:none;
+  -ms-user-select:none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  vertical-align: middle;
+  z-index: 1;
+  will-change: opacity, transform;
+  transition: all .3s ease-out;
+}
+
+.waves-effect .waves-ripple{
+  position: absolute;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  margin-top: -10px;
+  margin-left: -10px;
+  opacity: 0;
+  background: rgba(0, 0, 0, 0.2);
+  transition: all 0.7s ease-out;
+  transition-property: opacity, -webkit-transform;
+  transition-property: transform,opacity;
+  transition-property: transform,opacity,-webkit-transform;
+  -webkit-transform:  scale(0);
+  transform: scale(0);
+  pointer-events: none;
+}

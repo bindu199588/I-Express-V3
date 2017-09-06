@@ -1,0 +1,42 @@
+<div class="userPostScreenHeader">
+	<a ui-sref="userDashboard"><md-icon md-svg-src="images/icons/arrow_back.svg" aria-label="sentiment"></md-icon></a>
+	<div class="headings">
+		<h4>{{hashtag}}</h4>
+		<h5>{{tagDesc}}</h5>
+	</div>	
+</div>
+
+<div class="userPostScreenContainer">
+	<div class="postContainer" id="tweetContainer">
+		<h3>Dashboard</h3>
+		<div ng-repeat="tweet in curListTweets" class="card">
+			<div style="flex:1;">
+				<div class="cardTitle" style="font-weight: 800; text-decoration: underline; font-style: italic; color: #7d7d7d;">{{tweet.tag_id}}</div>
+				<div class="cardMessage">{{tweet.message}}</div>
+			</div>
+			
+			<div class="emojiWrapper -{{emoList[tweet.sentiment].name}}">
+				<md-icon md-svg-src="{{emoList[tweet.sentiment].icon}}" aria-label="sentiment"></md-icon>
+			</div>
+		</div>
+	</div>
+	<div class="formContainer">
+		<div class="column" style="width: 100%">						
+			<textarea placeholder="Write something here....." maxlength="250"
+				ng-model="selTweet" required>
+			</textarea>
+			<br>
+			<br>
+			<button ng-click="postTweet()">POST</button>
+			<br>
+			<br>
+			<div class="percentContainer">
+	            <div ng-repeat="emotion in emoList" class="emojiWrapper -{{emotion.name}}">
+	               <md-icon md-svg-src="{{emotion.icon}}" aria-label="sentiment"></md-icon>
+	               <div class="emoPercent">{{emoPercents[emotion.name]/emoPercents['total']*100 | number: 2}}</div>
+	               <md-progress-linear md-mode="determinate" value="{{emoPercents[emotion.name]/emoPercents['total']*100}}"></md-progress-linear>
+	            </div>
+          	</div>
+		</div>
+	</div>
+</div>

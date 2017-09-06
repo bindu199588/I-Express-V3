@@ -1,0 +1,72 @@
+.userPostScreenContainer{
+	display: flex;
+    flex-wrap: wrap;
+    padding: 0px  25px;
+	
+}
+.userPostScreenContainer .postContainer,.userPostScreenContainer .formContainer{
+	flex: 1 1 360px;
+	padding:10px;	
+}
+.userPostScreenContainer .postContainer{
+	max-height:100vh;
+	height:	600px;
+	overflow-y:scroll;
+	
+}
+
+@media screen and (max-device-width: 480px){
+	.userPostScreenContainer{
+		padding: 0px 5px;
+	}
+	.userPostScreenContainer .postContainer{
+		height: 320px;
+	}
+}
+
+
+.userPostScreenHeader a{
+	float:left;
+}
+.userPostScreenHeader .headings h4, .userPostScreenHeader .headings h5{
+	text-align:left;
+	margin:0px 0px 5px 10px;
+}
+
+.userPostScreenHeader .headings{
+	display: flex;
+    flex-direction: column;
+    align-content: flex-start;
+}
+
+
+.userPostScreenContainer .formContainer button {
+	background: #e6343b;
+    color: #fff;
+    border: 1px solid white;
+    padding: 10px 15px;
+    font-weight: 500 !important;
+}
+
+.userPostScreenContainer .formContainer textarea:focus {
+	outline: none !important;
+	border: 1px solid rgba(0, 0, 0, .8);
+}
+
+.userPostScreenContainer .formContainer textarea {
+	border: 1px solid #D8D8D8;
+    background-color: white;
+    height: 100px;
+    width: 95%;
+    color: black;
+    font-weight: 100;
+    padding: 10px;
+}
+
+
+.userPostScreenContainer  .postContainer .card{
+	display:flex;
+	margin-bottom:16px;
+    background-color: #f7f7f7;
+    padding: 10px 16px;
+}

@@ -1,0 +1,140 @@
+.userDashboard-container{
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  align-content: center;
+  flex-direction: column;
+
+}
+
+.cards-container{
+   	display: -webkit-flex; 
+    display: flex;
+    align-content: flex-start;
+    -webkit-flex-wrap: wrap; 
+    flex-wrap: wrap;
+    height: 85%;
+    overflow-y: scroll;
+}
+
+.cards-container a{
+	max-width:436px;
+	min-width:376px;
+	flex:1 1 376px;
+	display: flex;
+}
+.hashtag-card {
+  cursor: pointer;
+  border-radius: 2px;
+  overflow: hidden;
+  flex: 1;
+}
+
+.hashtag-card-header {
+  height: 65px;
+  padding: 16px 16px 16px 16px;
+  color: #FFFFFF;
+  overflow: hidden;
+
+}
+
+.hashtag-card-header.-greenColor{
+	background-color:	#e6323b;
+}
+
+.hashtag-card-separator.-interview {
+    background-color: #45FF48;
+}
+
+.hashtag-card-header md-card-title-text .md-subhead{
+  height: 45px;
+  overflow: hidden;
+  font-size:  12px;
+  line-height: 14px;
+  padding-top: 0px;
+  color:#fff!important;
+}
+
+
+
+.hashtag-card-header .md-headline{
+  height: 45px;
+  overflow: hidden;
+  font-size:14px;
+  font-weight:700;
+}
+
+.hashtag-card-header .respCountContainer{
+	background: white;
+    padding: 0px 16px;
+    height: 30px;
+    color: #e6323b;
+    border-radius: 15px;
+    line-height:2;
+}
+
+.hashtag-card-content{
+  background-color: white;
+  color: black;
+  height: 110px;
+  padding: 16px;
+}
+
+.percentContainer{
+	display: flex;
+    display: -webkit-flex;
+    justify-content: space-around;
+}
+.emojiWrapper{
+	display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.emojiWrapper md-icon{
+	color:#fff;
+	border-radius:50%;
+	height:40px;
+	width:40px;
+}
+
+.emojiWrapper md-progress-linear{
+	width:40px;
+}
+
+.emojiWrapper.-upset md-icon{
+	color:#da440a;
+} 
+.emojiWrapper.-upset md-progress-linear .md-container .md-bar{	
+	background-color:	#da440a;
+}
+
+.emojiWrapper.-sad md-icon{
+	color:#f57900;
+}
+.emojiWrapper.-sad  md-progress-linear .md-container .md-bar{
+	background-color:	#f57900;
+}
+
+
+.emojiWrapper.-neutral md-icon{
+	color:#ffac03;
+}
+.emojiWrapper.-neutral  md-progress-linear .md-container .md-bar{
+	background-color:	#ffac03;
+}
+
+.emojiWrapper.-happy md-icon{
+	color:#4e9a06;
+}
+.emojiWrapper.-happy  md-progress-linear .md-container .md-bar{
+	background-color:	#4e9a06;
+}
+.emojiWrapper.-glad md-icon{
+	color:#006319;
+}
+.emojiWrapper.-glad  md-progress-linear .md-container .md-bar{
+	background-color:	#006319;
+}
+

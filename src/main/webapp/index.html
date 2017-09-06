@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="author" content="naga-himabindu.akella">
+		<link rel="stylesheet" type="text/css" href="UI_library/angular-material.min.css"/>
+		<link rel="stylesheet" type="text/css" href="master.css"/>
+		<title>IExpress</title>
+	</head>
+	<body ng-app="iexpress" class= "bodyContainer">
+
+		<!-- <iexpress-header class="iexpress-header"></iexpress-header> -->
+		<iexpress-loader class="iexpress-loader"></iexpress-loader>
+		<div class="mainContainer {{$state.current.name}}" ui-view></div>
+
+		<!--
+
+		put this in the header
+		<iexpress-logout></iexpress-logout>
+
+
+		-->
+		<script src = "UI_library/angular.min.js"></script>
+		<script src = "UI_library/angular-route.min.js"></script>
+		<script src = "UI_library/angular-ui-router.min.js"></script>
+		<script src = "UI_library/angular-animate.min.js"></script>
+		<script src = "UI_library/angular-aria.min.js"></script>
+		<script src = "UI_library/angular-material.min.js"></script>
+
+		<script src = "js/master.js"></script>
+		<script src = "js/routes.js"></script>
+		<script src = "js/components.js"></script>
+		<script src = ""/>
+	</body>
+
+</html>

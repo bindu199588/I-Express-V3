@@ -1,0 +1,28 @@
+<div class="userDashboard-container">
+  <h4>User Dashboard</h4>
+  <div class="cards-container">
+    <a ng-repeat="hashtag in hashtagList" ng-click = "goToPostScreen($index)">
+      <md-card class="hashtag-card" >
+        <md-card-title class="hashtag-card-header -greenColor">
+          <md-card-title-text>
+            <span class="md-headline">{{hashtag.name}}</span>            
+            <span class="md-subhead">{{hashtag.desc}}</span>
+          </md-card-title-text>
+          <div class="respCountContainer">{{hashtag.total}}</div>
+        </md-card-title>
+        <md-card-content class="hashtag-card-content">
+          <div class="percentContainer">
+            <div ng-repeat="emotion in emoList" class="emojiWrapper -{{emotion.name}}">
+               <md-icon md-svg-src="{{emotion.icon}}" aria-label="sentiment"></md-icon>
+               <div class="emoPercent">{{hashtag[emotion.name]/hashtag['total']*100 | number: 2}}</div>
+               <md-progress-linear md-mode="determinate" value="{{hashtag[emotion.name]/hashtag['total']*100}}"></md-progress-linear>
+            </div>
+          </div>
+        </md-card-content>
+      </md-card>
+    </a>
+    <cards-pagination></cards-pagination>
+  </div>
+
+
+</div>
