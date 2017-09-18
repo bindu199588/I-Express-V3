@@ -1,5 +1,5 @@
 <div class="userDashboard-container">
-  <h4>User Dashboard</h4>
+  <h4 class="userDashboard-header">TechDay@SGGSC</h4>
   <div class="cards-container">
     <a ng-repeat="hashtag in hashtagList" ng-click = "goToPostScreen($index)">
       <md-card class="hashtag-card" >
@@ -8,21 +8,30 @@
             <span class="md-headline">{{hashtag.name}}</span>            
             <span class="md-subhead">{{hashtag.desc}}</span>
           </md-card-title-text>
-          <div class="respCountContainer">{{hashtag.total}}</div>
+          <!--<div class="respCountContainer">{{hashtag.total}}</div>  -->
         </md-card-title>
         <md-card-content class="hashtag-card-content">
           <div class="percentContainer">
             <div ng-repeat="emotion in emoList" class="emojiWrapper -{{emotion.name}}">
                <md-icon md-svg-src="{{emotion.icon}}" aria-label="sentiment"></md-icon>
-               <div class="emoPercent">{{hashtag[emotion.name]/hashtag['total']*100 | number: 2}}</div>
+               <div class="emoPercent">{{hashtag[emotion.name]/hashtag['total']*100 | number: 2}}%</div>
                <md-progress-linear md-mode="determinate" value="{{hashtag[emotion.name]/hashtag['total']*100}}"></md-progress-linear>
             </div>
           </div>
         </md-card-content>
+        <md-card-actions class="hashtag-card-actions">
+          <div class="respCountContainer">
+          	<span style="font-size:13px">Comments : </span>
+          	<span style="font-weight:600">{{hashtag.total}}</span>
+          </div>
+          <img ng-show="hashtagList.length >3 && $index <3 && hashtag['total'] > 0" src="images/icons/animated-fire-image-0379.gif" alt="Popular" height="24" width="24" ng-cloak>
+          <!-- <md-icon md-svg-src="images/icons/animated-fire-image-0379.gif" aria-label="sentiment"></md-icon>  -->
+        </md-card-actions>
       </md-card>
     </a>
     <cards-pagination></cards-pagination>
   </div>
 
+  
 
 </div>

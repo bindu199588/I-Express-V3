@@ -37,8 +37,23 @@
 .mainContainer{
 	padding:10px;
 	height: calc(100vh - 80px);
+	overflow-y: scroll;
 }
 
 a{
 	text-decoration: none;
+}
+
+.appFooter{
+	display: flex;
+    justify-content: center;
+    font-size: 12px;
+}
+
+::-webkit-scrollbar { 
+    display: none; 
+}
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
 }

@@ -22,8 +22,8 @@ public class DbBean {
 		source.setDatabaseName("xys");
 		source.setUser("spark");
 		source.setPassword("spark");
-		source.setMaxConnections(10);
-		source.setInitialConnections(3);
+		source.setMaxConnections(20);
+		source.setInitialConnections(5);
 		try {
 			new InitialContext().rebind("xys_db", source);
 		} catch (NamingException e) {

@@ -2,10 +2,16 @@
   height: 100%;
   overflow: hidden;
   display: flex;
-  align-items: center;
-  align-content: center;
+  /*align-items: center;
+  align-content: center;*/
   flex-direction: column;
 
+}
+.userDashboard-header{
+    padding-left: 10px;
+    font-size: 22px;
+    color: black;
+    font-weight: 500;
 }
 
 .cards-container{
@@ -16,6 +22,8 @@
     flex-wrap: wrap;
     height: 85%;
     overflow-y: scroll;
+    align-items: flex-start;
+    overflow-x: hidden;
 }
 
 .cards-container a{
@@ -65,7 +73,7 @@
   font-weight:700;
 }
 
-.hashtag-card-header .respCountContainer{
+/*.hashtag-card-actions .respCountContainer{
 	background: white;
     padding: 0px 16px;
     height: 30px;
@@ -73,11 +81,13 @@
     border-radius: 15px;
     line-height:2;
 }
+*/
+
 
 .hashtag-card-content{
   background-color: white;
   color: black;
-  height: 110px;
+  height: 65px;
   padding: 16px;
 }
 
@@ -136,5 +146,18 @@
 }
 .emojiWrapper.-glad  md-progress-linear .md-container .md-bar{
 	background-color:	#006319;
+}
+
+.hashtag-card-actions{
+	display: flex;
+    align-content: space-between;
+    padding: 0px 24px;
+    align-items: baseline;
+    
+}
+
+.hashtag-card-actions .respCountContainer{
+	flex:1;
+	line-height: 2.5;
 }
 

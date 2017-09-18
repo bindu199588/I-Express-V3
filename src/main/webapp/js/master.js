@@ -63,12 +63,18 @@ app.controller("userDashboardCtrl",function($scope,$http,$state){
 
 
 });
+
+
 app.controller("userLoginCtrl",function($scope){});
+
 app.controller("userPostScreenCtrl",function($scope, $stateParams,$http,$timeout) {
         $scope.tagId = $stateParams.tagId;
-        //$scope.tagName = $stateParams.tagName;
-        $scope.hashtag = $stateParams.tagName.trim();
-        $scope.tagDesc = $stateParams.tagDesc;
+        if($stateParams.tagName !==null){
+        	$scope.tagName = $stateParams.tagName.trim();
+        }
+        if($stateParams.tagDesc !== null){
+        	$scope.tagDesc = $stateParams.tagDesc;
+        }
         
         $scope.curListTweets=[];
     	$scope.prevListTweets=[];
@@ -120,7 +126,7 @@ app.controller("userPostScreenCtrl",function($scope, $stateParams,$http,$timeout
     		var config={
     				params:{
     					curTimeMS:$scope.curTime.getTime(),
-    					hashTag:$scope.hashtag.trim()
+    					hashTag:$scope.tagId
     				}
     		}    			
 			$http.get("getTweets",config)
@@ -150,6 +156,12 @@ app.controller("userPostScreenCtrl",function($scope, $stateParams,$http,$timeout
 	    	$http.get("perTagPercents",config)
 			.then(function(response){
 				$scope.emoPercents = response.data[0];
+				if($scope.tagName == null){
+					$scope.tagName = $scope.emoPercents['name'];
+				}
+				if($scope.tagDesc == null){
+					$scope.tagDesc = $scope.emoPercents['desc'];
+				}
 				console.log(JSON.stringify($scope.emoPercents));
 			},function(error){
 				console.log("THERE HAS BEEN AN ERROR IN QUERYING THE DATABASE"+error);

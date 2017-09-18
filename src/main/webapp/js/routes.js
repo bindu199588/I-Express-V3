@@ -30,10 +30,9 @@ app.config(function($stateProvider, $urlRouterProvider){
 
 	})	
 	.state("userPostScreen",{
-		url:	"/userPostScreen",
+		url:	"/userPostScreen/:tagId",
 		templateUrl : "views/userPostScreen.html",
 		 params: {
-		        tagId: null,  //default value
 		        tagName: null,
 		        tagDesc:null
 		},
