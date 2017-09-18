@@ -11,6 +11,14 @@
     <finalName>i-express</finalName>
   </build>
 
+  <repositories>
+    <repository>
+      <id>in-project</id>
+      <name>In Project Repo</name>
+      <url>file://${project.basedir}/src/main/webapp/libs</url>
+    </repository>
+  </repositories>
+  
   <properties>
   	<maven.compiler.target>1.8</maven.compiler.target>
     <maven.compiler.source>1.8</maven.compiler.source>
