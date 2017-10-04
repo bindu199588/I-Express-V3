@@ -1,10 +1,21 @@
 .iexpress-loader-container .loader-backdrop{
-  background-color: rgba(255, 255, 255, 0.3);
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 100%;
-  z-index: 5;
-  width: 100%;
+	background-color: rgba(72, 72, 72, 0.8);
+	position: fixed;
+	top: 0;
+	left: 0;
+	height: 100%;
+	z-index: 5;
+	width: 100%;
+	float: left;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
 
+.linear-fade{
+	transition: all linear 0.5s;
+}
+
+.linear-fade.ng-hide{
+	opacity: 0;
 }

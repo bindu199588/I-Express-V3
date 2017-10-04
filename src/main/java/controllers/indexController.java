@@ -23,6 +23,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import dataObjects.eventObject;
 import dataObjects.tagEmoPercentObject;
 import dataObjects.tweetObject;
 import database.DbBean;
@@ -195,5 +196,41 @@ public class indexController {
 		return jsonString;
 
 	}
+	
+	@RequestMapping("/getEvents")
+	@ResponseBody
+	public String getEvents() throws ClassNotFoundException, SQLException, JsonProcessingException{
+		
+		String jsonString ="";
+		List<eventObject> evList = new ArrayList<eventObject>();
+		try(Connection con = db.getConnection()){
+			if(con!=null){
+				StringBuilder sb = new StringBuilder("select id,name,description,access_code,created_on from event where is_active = true order by created_on DESC");
+				PreparedStatement pst = con.prepareStatement(sb.toString());
+				rs = pst.executeQuery();
+				while(rs.next()){
+					evList.add(new eventObject(rs.getInt("id"),rs.getString("name"),rs.getString("description"),rs.getString("access_code"),rs.getDate("created_on").getTime()));
+				}
+				return mapper.writeValueAsString(evList);
+			}
+		}
+		return jsonString;
+	}
+	
+	
+	
+	@RequestMapping("/createEvent")
+	@ResponseBody
+	public String createEvent() throws ClassNotFoundException, SQLException{
+		
+		String jsonString ="";
+		try(Connection con = db.getConnection()){
+			if(con!=null){
+				
+			}
+		}
+		return jsonString;
+	}
+	
 
 }

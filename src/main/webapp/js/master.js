@@ -1,15 +1,32 @@
 var app= angular.module("iexpress",["ngRoute","ngMaterial","ui.router"]);
 
+
 app.run(function ($rootScope,   $state,   $stateParams) {
     $rootScope.$state = $state;
     $rootScope.$stateParams = $stateParams;
 });
+
+
+/*
+ * START CONFIG
+ */
 app.config(function($mdThemingProvider,$mdIconProvider) {
   $mdThemingProvider.theme('dark-grey').backgroundPalette('grey').dark();
   $mdThemingProvider.theme('dark-orange').backgroundPalette('orange').dark();
   $mdThemingProvider.theme('dark-purple').backgroundPalette('deep-purple').dark();
   $mdThemingProvider.theme('dark-blue').backgroundPalette('blue').dark();
 });
+
+/*
+ * END CONFIG
+ */
+
+
+
+
+/*
+ * START FACTORIES 
+ */
 
 
 app.factory('hashtagData', function () {
@@ -25,19 +42,43 @@ app.factory('hashtagData', function () {
     };
 });
 
-
-app.controller("indexController",function($rootScope,$scope){
-	$scope.testVariable="THIS IS THE INDEX CONTROLLER WHICH IS USED FOR LOADING THE VIEWS";
-
+app.factory('pageLoader',function(){
+	var isLoading = false;
+	return{
+		setLoading: function(loading){
+			isLoading = loading;
+		},
+		getLoading:function(){
+			return isLoading;
+		}
+	}
+	
 });
 
-app.controller("adminDashboardCtrl",function($scope){
+/*
+ * END FACTORIES
+ */
+
+
+
+/*
+ * 
+ * START CONTROLLERS
+ * 
+ * 
+ * 
+ */
+
+
+app.controller("indexController",function($rootScope,$scope){});
+
+app.controller("adminDashboardCtrl",function($scope,pageLoader){
 	$scope.testVariable ="adminDashboardCtrl";
 });
 
 app.controller("adminLoginCtrl",function($scope){});
 
-app.controller("userDashboardCtrl",function($scope,$http,$state){
+app.controller("userDashboardCtrl",function($scope,$http,$state,pageLoader){
 	
 	$scope.eventName = "tech Day";
 	$scope.emoList=[
@@ -47,27 +88,43 @@ app.controller("userDashboardCtrl",function($scope,$http,$state){
 		{name:'happy',icon:'images/icons/happy.svg'},
 		{name:'glad',icon:'images/icons/glad.svg'}
 	]
-	
+	pageLoader.setLoading(true);
 	$http.get('allTagPercents')
 		.then(function(response){
 			$scope.hashtagList =response.data;
+			pageLoader.setLoading(false);
 			//console.log(JSON.stringify($scope.hashtagList));
 		},function(error){
 			console.log("ERROR IN GETTING RESPONSE")
 		});
 	
 	$scope.goToPostScreen = function(index){
+		pageLoader.setLoading(true);
 		var selTagData = $scope.hashtagList[index];
 		$state.go('userPostScreen', {tagId : selTagData.id,tagName:selTagData.name ,tagDesc:selTagData.desc  });
 	}
-
-
 });
 
 
-app.controller("userLoginCtrl",function($scope){});
+app.controller("userLoginCtrl",function($scope,$http){
+	//$scope.eventList = [{name:'event1'},{name:'event2'},{name:'event3'}];
+	$scope.loadEvents = function(){
+		$http.get("getEvents")
+		.then(function(response){
+			$scope.eventList = response.data;
+			console.log(response.data);
+		},function(error){
+			console.log("THERE HAS BEEN AN ERROR IN QUERYING THE DATABASE"+error);
+		});
+	}
+	
+	$scope.loadEvents();
+	
+	
+});
 
-app.controller("userPostScreenCtrl",function($scope, $stateParams,$http,$timeout) {
+app.controller("userPostScreenCtrl",function($scope, $stateParams,$http,$timeout,pageLoader) {
+		
         $scope.tagId = $stateParams.tagId;
         if($stateParams.tagName !==null){
         	$scope.tagName = $stateParams.tagName.trim();
@@ -88,12 +145,13 @@ app.controller("userPostScreenCtrl",function($scope, $stateParams,$http,$timeout
     		{name:'happy',icon:'images/icons/happy.svg'},
     		{name:'glad',icon:'images/icons/glad.svg'}
     	]
-    	
+    	pageLoader.setLoading(true);
     	$scope.preload=function(){	
     		$scope.loadPercentgraph();
     		$scope.getTweets();    		
-    		setInterval($scope.getTweets, 2000);		
+    		setInterval($scope.getTweets, 2000);    		
     	}
+    	pageLoader.setLoading(false);
     	
     	$scope.postTweet = function(){
     		$scope.copyTweet = $scope.selTweet;
@@ -175,6 +233,17 @@ app.controller("userPostScreenCtrl",function($scope, $stateParams,$http,$timeout
 
 
 app.controller("iexpressHeaderCtrl",function($scope){});
-app.controller("iexpressLoaderCtrl",function($scope){
-	$scope.isLoading = false;
+app.controller("iexpressLoaderCtrl",function($scope,pageLoader,$timeout){
+	$scope.activeLoading = function(){
+		return pageLoader.getLoading();
+	}
+	
 });
+
+
+/*
+ * 
+ * END CONTROLLERS
+ * 
+ * 
+ */

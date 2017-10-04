@@ -39,6 +39,11 @@
 	height: calc(100vh - 80px);
 	overflow-y: scroll;
 }
+/*.userLogin {
+    display: flex;
+    align-items: center;
+    align-content: center;
+}*/
 
 a{
 	text-decoration: none;
@@ -53,7 +58,12 @@ a{
 ::-webkit-scrollbar { 
     display: none; 
 }
+*{
+	-ms-overflow-style: none;  // IE 10+
+    overflow: -moz-scrollbars-none;  // Firefox
+}
 
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
   display: none !important;
 }
+
