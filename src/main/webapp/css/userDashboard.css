@@ -1,35 +1,31 @@
 .userDashboard-container{
   height: 100%;
   overflow: hidden;
-  display: flex;
-  /*align-items: center;
-  align-content: center;*/
-  flex-direction: column;
-
 }
 .userDashboard-header{
     padding-left: 10px;
     font-size: 22px;
     color: black;
+    align-items: center;
+    /*font-weight: 500;*/
+}
+
+.userDashboard-header h4 {
     font-weight: 500;
 }
 
 .cards-container{
-   	display: -webkit-flex; 
-    display: flex;
-    align-content: flex-start;
     -webkit-flex-wrap: wrap; 
     flex-wrap: wrap;
     height: 85%;
-    overflow-y: scroll;
-    align-items: flex-start;
+    overflow-y: scroll;    
     overflow-x: hidden;
 }
 
 .cards-container a{
-	max-width:436px;
-	min-width:376px;
-	flex:1 1 376px;
+	max-width:420px;
+	min-width:360px;
+	flex:1 1 360px;
 	display: flex;
 }
 .hashtag-card {
@@ -40,8 +36,8 @@
 }
 
 .hashtag-card-header {
-  height: 65px;
-  padding: 16px 16px 16px 16px;
+  height: 60px;
+  padding: 8px;
   color: #FFFFFF;
   overflow: hidden;
 
@@ -56,57 +52,39 @@
 }
 
 .hashtag-card-header md-card-title-text .md-subhead{
-  height: 45px;
+  height: 30px;
   overflow: hidden;
   font-size:  12px;
   line-height: 14px;
-  padding-top: 0px;
+  padding-top: 0px!important;
   color:#fff!important;
 }
 
-
+md-card md-card-actions {
+     margin: 0px!important;
+}
 
 .hashtag-card-header .md-headline{
-  height: 45px;
+  height: 30px;
   overflow: hidden;
   font-size:14px;
   font-weight:700;
 }
 
-/*.hashtag-card-actions .respCountContainer{
-	background: white;
-    padding: 0px 16px;
-    height: 30px;
-    color: #e6323b;
-    border-radius: 15px;
-    line-height:2;
-}
-*/
-
-
 .hashtag-card-content{
   background-color: white;
   color: black;
-  height: 65px;
-  padding: 16px;
+  height: 45px;
+  padding: 8px;
 }
 
-.percentContainer{
-	display: flex;
-    display: -webkit-flex;
-    justify-content: space-around;
-}
-.emojiWrapper{
-	display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.emojiWrapper md-icon{
-	color:#fff;
-	border-radius:50%;
+.icon-40{
 	height:40px;
 	width:40px;
+}
+.icon-30{
+	height:30px;
+	width:30px;
 }
 
 .emojiWrapper md-progress-linear{
@@ -151,7 +129,7 @@
 .hashtag-card-actions{
 	display: flex;
     align-content: space-between;
-    padding: 0px 24px;
+    padding: 0px 16px;
     align-items: baseline;
     
 }

@@ -7,52 +7,75 @@
 @import url("css/iexpressHeader.css");
 
 @font-face {
-  font-family: "Raleway-Thin";
+  font-family: "Raleway-Regular";
   font-style: normal;
-  src:url("fonts/Raleway-Thin.ttf");
+  src:url("fonts/Raleway-Regular.ttf");
 }
+
 @font-face {
   font-family: "Raleway-Bold";
   font-style: normal;
   src:url("fonts/Raleway-Bold.ttf");
 }
-@font-face {
-  font-family: "Raleway-Regular";
-  font-style: normal;
-  src:url("fonts/Raleway-Regular.ttf");
-}
-@font-face {
-  font-family: "Raleway-SemiBold";
-  font-style: normal;
-  src:url("fonts/Raleway-SemiBold.ttf");
-}
 
 .bodyContainer{
 	overflow-x: hidden;
     background-color: #fff;
-    color: #868686;
     font-family: Raleway-Regular;
 }
 
 .mainContainer{
-	padding:10px;
-	height: calc(100vh - 80px);
+	/*padding:10px;*/
+	height: calc(100vh - 100px);
 	overflow-y: scroll;
+	font-size:14px;
 }
-/*.userLogin {
-    display: flex;
-    align-items: center;
-    align-content: center;
-}*/
+
+.modalContainer{
+	padding:20px;
+}
 
 a{
 	text-decoration: none;
 }
 
+.textContent{
+	color:black;
+}
+
+.not-too-much-grey{
+	color: #8e8e8e;
+}
+
+
+.headings{
+	font-size:20px;
+	font-weight:600;
+	margin: 5px 0px;
+}
+.subHeadings{
+	color:lightgrey;
+}
+
+.subText{
+	color:lightgrey;
+	
+}
+
+.appButton{
+	opacity:.9;
+}
+
+.appButton:hover{
+	opacity:1;
+	cursor:pointer;
+}
+
+
 .appFooter{
 	display: flex;
     justify-content: center;
-    font-size: 12px;
+    font-size: 8px;
 }
 
 ::-webkit-scrollbar { 
@@ -66,4 +89,20 @@ a{
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
   display: none !important;
 }
+
+.errorMessages{
+	color:rgb(216,67,21);
+	margin-top:0px;
+	opacity:1;
+	font-size:12px;
+}
+
+.errorMessages .ng-hide {
+  opacity: 0;
+}
+
+.errorMessages .ng-hide-remove {
+  transition: all linear 0.5s;
+}
+
 

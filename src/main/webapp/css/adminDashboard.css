@@ -1,0 +1,57 @@
+.dashboardWrapper{
+	flex-wrap:wrap;
+}
+
+.graphWrapper, .graphWrapper .subHeadings,#trendsContainer {
+	width: 600px;
+    max-width: 100%;
+    flex: 1;
+}
+.graphWrapper h4 ,.graphWrapper #graphSelect, .graphWrapper .subHeadings{
+	padding:0px 15px;
+}
+.adminWrappers{
+	flex:1 1 360px;
+	max-width:100%;
+	min-width:360px;
+	max-height:450px;
+	padding:0px 15px;
+	overflow-y:scroll;
+}
+
+
+.dashboardWrapper .adminWrappers{
+	margin:0px auto;
+}
+
+.dashboardWrapper .adminWrappers button{
+	width: fit-content;
+    margin: 6px 0px;
+}
+
+.adminEventListWrapper .adminEventsWrapper{
+	overflow-y:scroll;
+}
+
+.adminHashtagListWrapper{
+	
+}
+.adminEventItem{
+	padding: 0px 10px;
+	border-bottom: 1px dotted lightgrey;
+}
+    
+.adminEventItem:hover{
+	background-color:#f7f7f7;
+	cursor:pointer;
+}
+.adminEventItem .adminEventName:hover{
+	text-decoration:underline;
+}
+.adminEventItem.active{
+	background-color:#e7e7e7;
+}
+
+.adminHashtagListWrapper .adminEventName{
+	margin:16px 0;
+}

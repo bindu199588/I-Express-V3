@@ -10,7 +10,7 @@
 	</head>
 	<body ng-app="iexpress" class= "bodyContainer">
 
-		<!-- <iexpress-header class="iexpress-header"></iexpress-header> -->
+		<iexpress-header class="iexpress-header"></iexpress-header>
 		<iexpress-loader class="iexpress-loader"></iexpress-loader>
 		<div class="mainContainer {{$state.current.name}}" ui-view></div>
 		<footer class="appFooter">
@@ -29,8 +29,13 @@
 		<script src = "UI_library/angular-ui-router.min.js"></script>
 		<script src = "UI_library/angular-animate.min.js"></script>
 		<script src = "UI_library/angular-aria.min.js"></script>
+		<script src = "UI_library/angular-messages.min.js"></script>
 		<script src = "UI_library/angular-material.min.js"></script>
-
+		
+		<script src="UI_library/jquery.min.js"></script>			
+		<script src="UI_library/highcharts.js"></script> 
+		
+		<script src = "js/graph.js"></script>
 		<script src = "js/master.js"></script>
 		<script src = "js/routes.js"></script>
 		<script src = "js/components.js"></script>

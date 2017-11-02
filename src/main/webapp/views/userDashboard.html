@@ -1,6 +1,12 @@
-<div class="userDashboard-container">
-  <h4 class="userDashboard-header">TechDay@SGGSC</h4>
-  <div class="cards-container">
+<div class="userDashboard-container" layout="column">
+  <div class="userDashboard-header" layout="row">
+  	<div class = "headings" flex>Dashboard - <em>{{eventName}}</em></div>
+  	 <md-button aria-label="Logout" ng-click ="logout()">
+  	 	  <md-tooltip md-direction="bottom">Logout</md-tooltip>
+          <md-icon class="md-warn icon-30" md-svg-src="images/icons/logout.svg"></md-icon>
+     </md-button>
+  </div>
+  <div class="cards-container" layout ="row" layout-align="start start">
     <a ng-repeat="hashtag in hashtagList" ng-click = "goToPostScreen($index)">
       <md-card class="hashtag-card" >
         <md-card-title class="hashtag-card-header -greenColor">
@@ -11,8 +17,8 @@
           <!--<div class="respCountContainer">{{hashtag.total}}</div>  -->
         </md-card-title>
         <md-card-content class="hashtag-card-content">
-          <div class="percentContainer">
-            <div ng-repeat="emotion in emoList" class="emojiWrapper -{{emotion.name}}">
+          <div class="percentContainer" layout="row" layout-align="space-around center">
+            <div ng-repeat="emotion in emoList" class="emojiWrapper -{{emotion.name}}" layout="column" layout-align="center center">
                <md-icon md-svg-src="{{emotion.icon}}" aria-label="sentiment"></md-icon>
                <div class="emoPercent">{{hashtag[emotion.name]/hashtag['total']*100 | number: 2}}%</div>
                <md-progress-linear md-mode="determinate" value="{{hashtag[emotion.name]/hashtag['total']*100}}"></md-progress-linear>

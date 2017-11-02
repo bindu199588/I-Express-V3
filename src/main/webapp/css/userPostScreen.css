@@ -28,24 +28,14 @@
 .userPostScreenHeader a{
 	float:left;
 }
-.userPostScreenHeader .headings h4, .userPostScreenHeader .headings h5{
+.userPostScreenHeader h4, .userPostScreenHeader h5{
 	text-align:left;
 	margin:0px 0px 5px 10px;
-}
-
-.userPostScreenHeader .headings{
-	display: flex;
-    flex-direction: column;
-    align-content: flex-start;
 }
 
 
 .userPostScreenContainer .formContainer button {
 	background: #e6343b;
-    color: #fff;
-    border: 1px solid white;
-    padding: 10px 15px;
-    font-weight: 500 !important;
 }
 
 .userPostScreenContainer .formContainer textarea:focus {

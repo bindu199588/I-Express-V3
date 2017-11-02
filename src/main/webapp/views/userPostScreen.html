@@ -1,9 +1,13 @@
-<div class="userPostScreenHeader">
+<div class="userPostScreenHeader" layout="row">
 	<!--<a ui-sref="userDashboard"><md-icon md-svg-src="images/icons/arrow_back.svg" aria-label="sentiment"></md-icon></a>  -->
-	<div class="headings">
+	<div layout="column" layout-align="start start" flex>
 		<h4>{{tagName}}</h4>
 		<h5>{{tagDesc}}</h5>
 	</div>	
+	<md-button aria-label="Logout" ng-click ="logout()">
+		  <md-tooltip md-direction="bottom">Logout</md-tooltip>
+          <md-icon class="md-warn icon-30" md-svg-src="images/icons/logout.svg"></md-icon>
+     </md-button>
 </div>
 
 <div class="userPostScreenContainer">
@@ -16,7 +20,7 @@
 			</div>
 			
 			<div class="emojiWrapper -{{emoList[tweet.sentiment].name}}">
-				<md-icon md-svg-src="{{emoList[tweet.sentiment].icon}}" aria-label="sentiment"></md-icon>
+				<md-icon class="icon-30" md-svg-src="{{emoList[tweet.sentiment].icon}}" aria-label="sentiment"></md-icon>
 			</div>
 		</div>
 	</div>
@@ -27,12 +31,12 @@
 			</textarea>
 			<br>
 			<br>
-			<button ng-click="postTweet()">POST</button>
+			<md-button class="md-warn md-raised md-hue-2">POST</md-button>
 			<br>
 			<br>
-			<div class="percentContainer">
+			<div class="percentContainer" layout="row" layout-align="space-around center">
 	            <div ng-repeat="emotion in emoList" class="emojiWrapper -{{emotion.name}}">
-	               <md-icon md-svg-src="{{emotion.icon}}" aria-label="sentiment"></md-icon>
+	               <md-icon class="icon-30" md-svg-src="{{emotion.icon}}" aria-label="sentiment"></md-icon>
 	               <div class="emoPercent">{{emoPercents[emotion.name]/emoPercents['total']*100 | number: 2}}%</div>
 	               <md-progress-linear md-mode="determinate" value="{{emoPercents[emotion.name]/emoPercents['total']*100}}"></md-progress-linear>
 	            </div>

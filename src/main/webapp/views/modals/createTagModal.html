@@ -1,0 +1,18 @@
+<div class="createTagModalContainer modalContainer">
+	<h2>Create New Tag</h2>
+	<form ng-submit="createTag()" name = "tagForm">
+		<md-input-container>
+	        <label>Tag Name</label>
+	        <input ng-model="name" required>
+	        <ng-messages for="tagForm.$error"  role="alert">
+	            <ng-message when="required">This is required</ng-message>
+	        </ng-messages>
+	    </md-input-container>
+	    <md-input-container>
+	        <label>Description</label>
+	        <input ng-model="description">
+	    </md-input-container>
+	    <md-button class="md-warn md-raised md-hue-2" type="Submit">CREATE</md-button>
+		<md-button class="md-raised" ng-click="cancel()" type="button">CANCEL</md-button>	
+	</form>	
+</div>

@@ -1,0 +1,21 @@
+<div class="editEventModalContainer modalContainer">
+	<h2>Create New Event</h2>
+	<form ng-submit="updateEvent()" name = "eventForm">
+		<md-input-container>
+	        <label>Event Name</label>
+	        <input ng-model="eventData.name" required>
+	        <ng-messages for="eventForm.$error"  role="alert">
+	            <ng-message when="required">This is required</ng-message>
+	        </ng-messages>
+	    </md-input-container>
+	    <md-input-container>
+	        <label>Description</label>
+	        <input ng-model="eventData.description">
+	    </md-input-container>
+	    <md-checkbox ng-model="eventData.is_active" aria-label="Active/Inactive">
+            Active/Inactive
+        </md-checkbox>
+	    <md-button class="md-warn md-raised md-hue-2" type="Submit">SAVE CHANGES</md-button>
+		<md-button class="md-raised" ng-click="cancel()" type="button">CANCEL</md-button>	
+	</form>			
+</div>

@@ -1,1 +1,66 @@
-<div> THIS IS THE FINAL ADMIN DASHBOARD </div>
+<div class="adminDashboardContainer" layout="column" layout-align="center center">
+	
+	<div class="adminDashboardHeader" layout="row">
+		<h3 flex>ADMIN DASHBOARD</h3>
+		<md-button aria-label="Logout" ng-click ="logout()">
+          <md-tooltip md-direction="bottom">Logout</md-tooltip>
+          <md-icon class="md-warn icon-30" md-svg-src="images/icons/logout.svg"></md-icon>
+    	</md-button>
+	</div>
+	<div class="dashboardWrapper" layout="row" layout-align="center start">
+		<div class="adminWrappers adminEventListWrapper"  layout="column">
+			<h4 class="not-too-much-grey">EVENTS</h4>
+			<md-button class="md-warn md-raised md-hue-2" ng-click="openCreateEventModal($event)">+ADD NEW EVENT</md-button>			
+			<div class="adminEventsWrapper">
+				<div ng-class="{'active':activeEventIndex === $index}" class="adminEventItem" ng-repeat="event in eventList" layout="row" layout-align="center center">
+					<div class="adminEventName" flex ng-click="setThisEventActive($index)">{{event.name}}</div>
+					<md-icon md-svg-src="images/icons/edit.svg" aria-label="Edit" class="md-warn" ng-click = "editEvent($event,$index)"></md-icon>
+					<md-switch ng-model="event.isactive" aria-label="Active/Inactive" class="md-warn" ng-click="disableEvent($index)"></md-switch>
+				</div>
+			</div>
+			<h4>Access Code - {{activeEvent.access_code}}</h4>
+		</div>
+		<div class="adminWrappers adminHashtagListWrapper" layout="column">
+			<h4 class="not-too-much-grey"> TAGS IN  THE EVENT - {{activeEvent.name.trim()}}</h4>
+			<md-button class="md-warn md-raised md-hue-2" ng-click="openCreateTagModal($event)">+ADD NEW TAG</md-button>
+			<div class="adminEventsWrapper">
+				<div class="adminEventItem" ng-repeat="tag in tagsList" layout="row" layout-align="center center">
+					<div class="adminEventName" flex>{{tag.name}}</div>
+					<md-icon md-svg-src="images/icons/edit.svg" aria-label="Edit" class="md-warn" ng-click = "editTag($event,$index)"></md-icon>
+					<md-icon md-svg-src="images/icons/delete_forever.svg" aria-label="Delete" class="md-warn" ng-click = "deleteTag($index)"></md-icon>					
+				</div>
+				<div ng-show="tagsList.length==0" class="adminEventItem" layout="row" layout-align="center center">
+					<div class="adminEventName" flex>NO TAGS IN THIS EVENT</div>
+				</div>
+			</div>
+			
+		</div>
+		
+		<div  class="graphWrapper" layout="column" layout-align="start center">
+			<h4 class="not-too-much-grey">TREND ANALYSIS</h4>		
+			<div id="graphSelect" layout= "row" layout-align="center center" style="width:100%">
+				<md-input-container flex>
+		          <label>Select Tag</label>
+		          <md-select ng-model="activeTagId">
+		            <md-option ng-value="null"><em>ALL TAGS</em></md-option>
+		            <md-option ng-repeat="tag in tagsList" ng-value="tag.id">
+		              {{tag.name}}
+		            </md-option>
+		          </md-select>
+		        </md-input-container>
+		        <md-button class="md-warn md-raised md-hue-2" ng-click="getTimeLineGraph(activeEvent.id,activeTagId)">UPDATE GRAPH</md-button>
+			</div>
+			<div class="graphContainer">
+				<div class="subHeadings" ng-show="graphData['0'].length == 0">
+					<b>NO DATA TO DISPLAY GRAPH</b>
+				</div>
+				<div ng-show="graphData['0'].length > 0" id ="trendsContainer">
+					
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	
+	
+</div>

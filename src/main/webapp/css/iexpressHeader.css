@@ -1,6 +1,21 @@
 .iexpress-header-container{
-	background-color:#33485f;
-  width:100%;
-  padding: 20px;
-	height:20px;
+	/*padding: 10px;*/
+	font-family:Raleway-Bold;
+}
+
+.iexpress-header-container >div{
+	float:left;
+}
+.iexpress-header-container .iexpressLogo{
+	font-size:16px;
+	font-weight:bold;
+}
+
+.iexpress-header-container .iexpressLogo.slantpart{
+	font-style:italic;
+	color:black;
+}
+
+.iexpress-header-container .iexpressLogo.normalpart{
+	color:red;
 }

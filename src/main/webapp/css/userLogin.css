@@ -1,42 +1,51 @@
-/*.userLoginContainer{
-    display: block;
-    margin: auto;
-    flex: 1 1 520px;
-    min-width: 300px;
-    max-width: 520px;
-    height: 100%;
-    overflow: hidden;
-}
-.userLoginContainer>h3{
-	margin-left: 20px;
+.userLoginContainer{
+	text-align:center;
 }
 .eventListWrapper{
-    height: 80%;
-	min-width: 300px;
-	max-width: 520px;
-	flex: 1 1 520px;
-	overflow-y: scroll;
-	padding: 0px 10px;
-	overflow-x: hidden;
-	margin-right: -16px;
-
-}*/
-
+    max-height: calc(100vh - 170px);
+    overflow-y: scroll;
+    -webkit-flex-wrap: wrap;
+    flex-wrap: wrap;    
+    overflow-x: hidden;
+}
+.eventListWrapper>*{
+    padding:16px 16px;
+    flex:1 1 45%;
+}
 .eventItem{
     background-color: whitesmoke;
-    padding: 25px;
     margin-bottom: 5px;
-    /* border: 2px solid white; */
     color: #484848;
     text-transform: capitalize;
+    max-width: 100%;
+    min-width: 45%;
+    margin: 2px 2px;
+    text-align:left;
 
 }
-.eventItem:hover .eventName{
+.eventItem:hover{
+	background-color:#e2e2e2;
 	cursor:pointer;
+}
+.eventItem:hover .eventName{
+	
 	text-decoration:underline;
 }
 
-.eventItem .eventDate{
-	color:#8e8e8e;
-	font-size:0.9em;
+.eventItem .eventName{
+	font-weight:600;
+}
+
+.eventItem .eventSubHead{
+	color: #8e8e8e;
+    font-size: 0.9em;
+    width: 100%;
+    overflow: hidden;
+    word-wrap: break-word;
+}
+
+.eventItem  .eventDescription{
+	font-style:italic;
+	height: 20px;
+    overflow: scroll;
 }

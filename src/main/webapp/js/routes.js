@@ -2,41 +2,49 @@ var app= angular.module("iexpress");
 
 app.config(function($stateProvider, $urlRouterProvider){
 
-	$urlRouterProvider.otherwise("/userDashboard");
+	$urlRouterProvider.otherwise("/userLogin");
 
 	$stateProvider
 	.state("adminLogin",{
 		url:	"/adminLogin",
 		templateUrl : "views/adminLogin.html",
-		controller:"adminLoginCtrl"
-
+		controller:"adminLoginCtrl",
+		isAdmin : true
 	})
 	.state("adminDashboard",{
 		url:	"/adminDashboard",
 		templateUrl:	"views/adminDashboard.html",
-		controller:"adminDashboardCtrl"
+		controller:"adminDashboardCtrl",
+		isAdmin : true
 
 	})	
 	.state("userLogin",{
 		url:	"/userLogin",
 		templateUrl : "views/userLogin.html",
-		controller:"userLoginCtrl"
+		controller:"userLoginCtrl",
+		isAdmin : false
 
 	})
 	.state("userDashboard",{
-		url:	"/userDashboard",
+		url:	"/userDashboard/:eventId",
 		templateUrl : "views/userDashboard.html",
-		controller:"userDashboardCtrl"
+		controller:"userDashboardCtrl",
+		params:{
+			eventName : null
+		},
+		isAdmin : false
 
 	})	
 	.state("userPostScreen",{
-		url:	"/userPostScreen/:tagId",
+		url:	"/userPostScreen/:eventId/:tagId",
 		templateUrl : "views/userPostScreen.html",
 		 params: {
 		        tagName: null,
-		        tagDesc:null
+		        tagDesc: null,
+		        eventName: null
 		},
-		controller:"userPostScreenCtrl"
+		controller:"userPostScreenCtrl",
+		isAdmin : false
 
 	})
 

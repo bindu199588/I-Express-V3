@@ -1,6 +1,19 @@
-<div>
-
-ADMIN LOGIN
-<a ui-sref="adminDashboard"><button> LOGIN TO ADMIN DASHBOARD</button></a>
+<div class="adminLoginContainer" layout="column" layout-align="center center">
+	<h3>ADMIN LOGIN</h3>
+	<md-input-container>
+        <label>Username</label>
+        <input ng-model="username" required>
+    </md-input-container>
+    <md-input-container>
+        <label>Password</label>
+        <input type="password" ng-model="password" required >
+    </md-input-container>
+    <div class="errorMessages"  role="alert">
+    	<div ng-show="errorMessages.lengthError" class="errorMessage">Username or Password should not be empty</div>
+        <div ng-show="errorMessages.accessError" class="errorMessage">Incorrect Username or Password</div>
+    </div>
+    <div layout="column">
+    	<md-button class="md-warn md-raised md-hue-2" ng-click="authenticateAndGo()">LOGIN</md-button>
+   		<a ui-sref="userLogin"><md-button style="background-color: #f1f1f1;color: #777777;" >Back To User Login</md-button></a>
+    </div>    
 </div>
-
