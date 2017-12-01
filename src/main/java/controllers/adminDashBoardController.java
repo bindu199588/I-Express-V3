@@ -5,11 +5,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.naming.NamingException;
 
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -17,8 +20,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import dataObjects.countAtDateObject;
+import dataObjects.eventAgendaObject;
 import dataObjects.eventObject;
 import dataObjects.tagObject;
+import dataObjects.userLoginObject;
 
 @Controller
 public class adminDashBoardController extends indexController{
@@ -44,63 +49,104 @@ public class adminDashBoardController extends indexController{
 		}
 		return jsonString;
 	}
-	@RequestMapping("/postNewTag")
+
+	@RequestMapping(value="/postNewTag", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public String createTag(@RequestParam(value = "name") String name,@RequestParam(value = "description") String description,@RequestParam(value = "eventId") Long eventId) throws ClassNotFoundException, SQLException{
-		
-		String jsonString ="";
+	public boolean createTag(@RequestBody List<tagObject> tagsList) throws ClassNotFoundException, SQLException{
 		try(Connection con = db.getConnection()){
 			if(con!=null){
 				StringBuilder sb = new StringBuilder("insert into tag(name,description,event_id) values(?,?,?)");
 				PreparedStatement pst = con.prepareStatement(sb.toString());
-				pst.setString(1,name);
-				pst.setString(2, description);
-				pst.setLong(3, eventId);
-				Integer rowCount = pst.executeUpdate();
-				return rowCount.toString();
+				//Iterator tagIt = tagsList.iterator();
+				for(tagObject tagObj : tagsList){
+					pst.setString(1,tagObj.getName());
+					pst.setString(2, tagObj.getDescription());
+					pst.setLong(3, tagObj.getEvent_id());
+					pst.executeUpdate();
+				}
+				return true;
 			}
 		}
-		return jsonString;
+		return false;
 	}
 	
-	@RequestMapping("/updateEvent")
+	@RequestMapping(value = "/postEventAgenda", produces=MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public String updateEvent(@RequestParam(value = "name") String name,@RequestParam(value = "description") String description,@RequestParam(value = "is_active") Boolean is_active,@RequestParam(value = "eventId") int eventId) throws ClassNotFoundException, SQLException{
-		
-		String jsonString ="";
+	public boolean addEventAgenda(@RequestBody List<eventAgendaObject> agendaList) throws ClassNotFoundException, SQLException{
 		try(Connection con = db.getConnection()){
 			if(con!=null){
-				StringBuilder sb = new StringBuilder("update event set name =?,description =?,is_active =? where id =?");
+				StringBuilder sb = new StringBuilder("insert into eventagenda(agenda,start_time,end_time,event_id) values(?,?,?,?)");
 				PreparedStatement pst = con.prepareStatement(sb.toString());
-				pst.setString(1,name);
-				pst.setString(2, description);
-				pst.setBoolean(3, is_active);
-				pst.setInt(4, eventId);
-				Integer rowCount = pst.executeUpdate();
-				return rowCount.toString();
+				for(eventAgendaObject agendaObject : agendaList){
+					pst.setString(1, agendaObject.getAgenda());
+					pst.setTimestamp(2, new java.sql.Timestamp(agendaObject.getStart_time()));
+					pst.setTimestamp(3, new java.sql.Timestamp(agendaObject.getEnd_time()));
+					pst.setLong(4, agendaObject.getEvent_id());
+					pst.executeUpdate();
+				}
+				return true;
 			}
 		}
-		return jsonString;
+		return false;
 	}
-	@RequestMapping("/updateTag")
+	
+	@RequestMapping(value = "/loadEventAgenda")
 	@ResponseBody
-	public String updateTag(@RequestParam(value = "name") String name,@RequestParam(value = "description") String description,@RequestParam(value = "eventId") Long eventId,@RequestParam(value = "tagId") int tagId) throws ClassNotFoundException, SQLException{
-		
-		String jsonString ="";
+	public String getEventAgenda(@RequestParam(value="event_id") Long eventId) throws ClassNotFoundException, SQLException, JsonProcessingException{
 		try(Connection con = db.getConnection()){
 			if(con!=null){
-				StringBuilder sb = new StringBuilder("update tag set name =?,description =? where id =? and event_id =?");
+				ResultSet rs;
+				List<eventAgendaObject> agendaList = new ArrayList<eventAgendaObject>();
+				StringBuilder sb = new StringBuilder("select * from eventagenda where event_id = ? order by start_time");
 				PreparedStatement pst = con.prepareStatement(sb.toString());
-				pst.setString(1,name);
-				pst.setString(2, description);
-				pst.setInt(3,tagId);
-				pst.setLong(4, eventId);
-				Integer rowCount = pst.executeUpdate();
-				return rowCount.toString();
+				pst.setLong(1,eventId);
+				rs = pst.executeQuery();
+				while(rs.next()){
+					agendaList.add(new eventAgendaObject(rs.getInt("id"),rs.getString("agenda"),rs.getTimestamp("start_time").getTime(),rs.getTimestamp("end_time").getTime(),rs.getLong("event_id"),0L));
+				}
+				return mapper.writeValueAsString(agendaList);
 			}
 		}
-		return jsonString;
+		return "";
 	}
+//	@RequestMapping("/updateEvent")
+//	@ResponseBody
+//	public String updateEvent(@RequestParam(value = "name") String name,@RequestParam(value = "description") String description,@RequestParam(value = "is_active") Boolean is_active,@RequestParam(value = "eventId") int eventId) throws ClassNotFoundException, SQLException{
+//		
+//		String jsonString ="";
+//		try(Connection con = db.getConnection()){
+//			if(con!=null){
+//				StringBuilder sb = new StringBuilder("update event set name =?,description =?,is_active =? where id =?");
+//				PreparedStatement pst = con.prepareStatement(sb.toString());
+//				pst.setString(1,name);
+//				pst.setString(2, description);
+//				pst.setBoolean(3, is_active);
+//				pst.setInt(4, eventId);
+//				Integer rowCount = pst.executeUpdate();
+//				return rowCount.toString();
+//			}
+//		}
+//		return jsonString;
+//	}
+//	@RequestMapping("/updateTag")
+//	@ResponseBody
+//	public String updateTag(@RequestParam(value = "name") String name,@RequestParam(value = "description") String description,@RequestParam(value = "eventId") Long eventId,@RequestParam(value = "tagId") int tagId) throws ClassNotFoundException, SQLException{
+//		
+//		String jsonString ="";
+//		try(Connection con = db.getConnection()){
+//			if(con!=null){
+//				StringBuilder sb = new StringBuilder("update tag set name =?,description =? where id =? and event_id =?");
+//				PreparedStatement pst = con.prepareStatement(sb.toString());
+//				pst.setString(1,name);
+//				pst.setString(2, description);
+//				pst.setInt(3,tagId);
+//				pst.setLong(4, eventId);
+//				Integer rowCount = pst.executeUpdate();
+//				return rowCount.toString();
+//			}
+//		}
+//		return jsonString;
+//	}
 	
 	@RequestMapping("/disableEvent")
 	@ResponseBody
@@ -165,26 +211,26 @@ public class adminDashBoardController extends indexController{
 		return jsonString;
 	}
 	
-	
-	@RequestMapping("/deleteTagFromEvent")
-	@ResponseBody
-	public String deleteTagFromEvent(@RequestParam(value = "eventId") Long eventId,@RequestParam(value = "tagId") int tagId)
-			throws ClassNotFoundException, SQLException, JsonProcessingException {
-		
-		String jsonString ="";
-		try(Connection con = db.getConnection()){
-			if(con!=null){
-				StringBuilder sb = new StringBuilder("delete from tag where event_id =? and id = ?");
-				PreparedStatement pst = con.prepareStatement(sb.toString());
-				pst.setLong(1, eventId);
-				pst.setInt(2, tagId);
-				Integer rowCount = pst.executeUpdate();
-				return rowCount.toString();
-			}
-		}
-		return jsonString;
-	}
-	
+//	
+//	@RequestMapping("/deleteTagFromEvent")
+//	@ResponseBody
+//	public String deleteTagFromEvent(@RequestParam(value = "eventId") Long eventId,@RequestParam(value = "tagId") int tagId)
+//			throws ClassNotFoundException, SQLException, JsonProcessingException {
+//		
+//		String jsonString ="";
+//		try(Connection con = db.getConnection()){
+//			if(con!=null){
+//				StringBuilder sb = new StringBuilder("delete from tag where event_id =? and id = ?");
+//				PreparedStatement pst = con.prepareStatement(sb.toString());
+//				pst.setLong(1, eventId);
+//				pst.setInt(2, tagId);
+//				Integer rowCount = pst.executeUpdate();
+//				return rowCount.toString();
+//			}
+//		}
+//		return jsonString;
+//	}
+//	
 	
 	@RequestMapping("/getEventGraphData")
 	@ResponseBody
@@ -233,7 +279,7 @@ public class adminDashBoardController extends indexController{
 						pst.setLong(2, eventId);
 						pst.setInt(3, sentiment);
 					}
-					System.out.println(pst.toString());
+					//System.out.println(pst.toString());
 					rs = pst.executeQuery();
 					while(rs.next()){
 						cb = new countAtDateObject(rs.getLong("count"),rs.getDate("date").getTime());

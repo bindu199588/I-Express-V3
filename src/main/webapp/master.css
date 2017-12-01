@@ -26,7 +26,7 @@
 
 .mainContainer{
 	/*padding:10px;*/
-	height: calc(100vh - 100px);
+	height: calc(100vh - 70px);
 	overflow-y: scroll;
 	font-size:14px;
 }
@@ -37,8 +37,11 @@
 
 a{
 	text-decoration: none;
+	color:rgb(216,67,21);
 }
-
+a:hover{
+	cursor:pointer;
+}
 .textContent{
 	color:black;
 }
@@ -49,9 +52,10 @@ a{
 
 
 .headings{
-	font-size:20px;
 	font-weight:600;
 	margin: 5px 0px;
+	padding: 0px 8px;
+    text-transform: capitalize;
 }
 .subHeadings{
 	color:lightgrey;
@@ -61,7 +65,10 @@ a{
 	color:lightgrey;
 	
 }
-
+button{
+	width:fit-content;
+	width:-moz-fit-content;
+}
 .appButton{
 	opacity:.9;
 }
@@ -71,12 +78,11 @@ a{
 	cursor:pointer;
 }
 
-
+/*
 .appFooter{
 	display: flex;
     justify-content: center;
-    font-size: 8px;
-}
+}*/
 
 ::-webkit-scrollbar { 
     display: none; 
@@ -94,7 +100,6 @@ a{
 	color:rgb(216,67,21);
 	margin-top:0px;
 	opacity:1;
-	font-size:12px;
 }
 
 .errorMessages .ng-hide {
@@ -105,4 +110,36 @@ a{
   transition: all linear 0.5s;
 }
 
+.font-8{
+	font-size:8px;
+}
+.font-12{
+	font-size:12px;
+}
+.font-14{
+	font-size:14px;
+}
+.font-16{
+	font-size:16px;
+}
+.font-20{
+	font-size:20px;
+}
+.font-24{
+	font-size:24px;
+}
+.margin-0{
+	margin:0px!important;
+}
+.margin-left-10{
+	margin-left:10px!important;
+}
+.padding-horizontal-10{
+	padding-left:10px;
+	padding-right:10px;
+}
 
+.padding-vertical-10{
+	padding-top:10px;
+	padding-bottom:10px;
+}

@@ -1,17 +1,27 @@
 package dataObjects;
 
 public class tagObject {
+	
 	int id;	
 	String name;
 	Long created_on;
 	String description;
 	Long event_id;
 	
+	public tagObject() {
+		super();		
+	}	
 	public tagObject(int id, String name, Long created_on, String description, Long event_id) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.created_on = created_on;
+		this.description = description;
+		this.event_id = event_id;
+	}
+	public tagObject(String name, String description, Long event_id) {
+		super();
+		this.name = name;
 		this.description = description;
 		this.event_id = event_id;
 	}

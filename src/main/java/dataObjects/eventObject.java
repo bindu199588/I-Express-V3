@@ -20,7 +20,13 @@ public class eventObject {
 		this.created_on = created_on;
 		this.access_code = access_code;
 	}
-
+	public eventObject(int id, String name, String description, boolean isactive) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.description = description;
+		this.isactive = isactive;
+	}
 	
 	public int getId() {
 		return id;

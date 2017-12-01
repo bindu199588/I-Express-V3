@@ -1,4 +1,4 @@
-var app= angular.module("iexpress",["ngRoute", "ngMessages","ngMaterial","ui.router","ngMaterialDatePicker"]);
+var app= angular.module("iexpress",["ngRoute", "ngMessages","ngMaterial","ui.router"]);
 app.run(function ($rootScope,   $state,   $stateParams) {
     $rootScope.$state = $state;
     $rootScope.$stateParams = $stateParams;
@@ -12,6 +12,17 @@ app.config(function($mdIconProvider) {
   $mdIconProvider
      .defaultIconSet('images/icons/icons.svg');
  });
+//app.config(function($provide) {
+//  $provide.decorator('$rootScope', function ($delegate) {
+//    var _emit = $delegate.$emit;
+//    $delegate.$emit = function () {
+//      console.log.apply(console, arguments);
+//      _emit.apply(this, arguments);
+//    };
+//    return $delegate;
+//  });
+//});
+
 
 /*
  *END APP CONFIG
@@ -38,14 +49,14 @@ app.factory('UserAuthenticationService',function($http,$state,$q){
 	var thisFactory = {};
 	
 	thisFactory.encryptCookie = function(cookieString){	
-		return $http.post("rest/encryptString",cookieString)
+		return $http.post("encryptString",cookieString)
 		.then(response => {
 			return response.data;
 		})
 		.catch(err => console.log("ERROR IN ENCRYPTION"+err))
 	}
 	thisFactory.decryptCookie = function(cookieString){
-		return $http.post("rest/decryptString",cookieString)
+		return $http.post("decryptString",cookieString)
 		.then(response => {
 			return response.data
 			
@@ -106,22 +117,19 @@ app.factory('UserAuthenticationService',function($http,$state,$q){
 		document.cookie = eventCookie + expiresCookie + "path=/";
 		return;
 	}	
-	thisFactory.loginUser = function(access_code){
+	thisFactory.loginUser = function(eventId,eventName,access_code){
 		return $http({
 		    method: 'POST',
-		    url: 'rest/loginUser',
-		    data: access_code
+		    url: 'loginUser',
+		    data: {
+				eventId:eventId,
+				eventName : eventName,
+				access_code: access_code
+		    }
 		})
 		.then(function(response){
-			if(response.data && response.data!=""){
-				//console.log(response.data)
-				cookieData = {
-					id:response.data.id,
-					name:response.data.name.trim(),
-					desc:response.data.description.trim()
-				}
-				
-				return thisFactory.setLoginCookie(JSON.stringify(cookieData),false)
+			if(response.data){
+				return thisFactory.setLoginCookie(eventName.trim()+eventId,false)
 				.then(result => {
 					return true
 				},(err)=>{
@@ -140,12 +148,12 @@ app.factory('UserAuthenticationService',function($http,$state,$q){
 			username: username,
 			password: password
 		}
-		return $http.post("rest/loginAdmin",config)
+		return $http.post("loginAdmin",config)
 		.then(function(response){
 			if(response.data){
 				return thisFactory.setLoginCookie(username,true)
 				.then(result=>{
-					//console.log('here in loginAdmin')
+					console.log('here in loginAdmin')
 					return true;
 				},(err)=>{
 					console.log(err)
@@ -158,6 +166,7 @@ app.factory('UserAuthenticationService',function($http,$state,$q){
 		},function(error){
 			console.log("ERROR IN LOGGING IN ADMIN")
 		})
+		//if success setlogin cookie
 	}
 	
 	thisFactory.isLoggedInAdmin = function(){
@@ -165,29 +174,35 @@ app.factory('UserAuthenticationService',function($http,$state,$q){
 			return thisFactory.getLoginCookie(true)
 			.then(response =>{
 				var existingCookie = response;
-				//console.log(existingCookie)
+				console.log(existingCookie)
 				if(existingCookie!=null && existingCookie !=""){
 					return resolve(true);
 				}
 				else{
 					return resolve(false);
 				}
-			});			
+			});
+			
 		})
 	}
-	thisFactory.checkEventLogin = function(){
+	thisFactory.isLoggedInUser = function(accessCookieName){
 		return $q((resolve,reject) => {				
 			return thisFactory.getLoginCookie(false)
 			.then(response =>{
 				var existingCookie = response;
 				if(existingCookie!=null && existingCookie !=""){
 					return thisFactory.decryptCookie(existingCookie)
-					.then(result=>{
-						return resolve(result);
+					.then(result=>{			
+						if(result == accessCookieName){
+							return resolve(true);
+						}
+						else {
+							return resolve(false);
+						}
 					})
 				}
 				else{								
-					return resolve("");					
+					return resolve(false);					
 				}
 			})
 		})	
@@ -203,6 +218,8 @@ app.factory('UserAuthenticationService',function($http,$state,$q){
  * END FACTORIES
  */
 
+
+
 /* 
  * START CONTROLLERS
  *  
@@ -211,9 +228,9 @@ app.factory('UserAuthenticationService',function($http,$state,$q){
 
 app.controller("indexController",function($rootScope,$scope){});
 
-//////////////////////////////////////////////////////////////////////////////////////
-////////////          CONTROLLER FOR ADMIN DASHBOARD     /////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
+//////////          CONTROLLER FOR ADMIN DASHBOARD     /////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
 
 app.controller("adminDashboardCtrl",function($scope,$http,$state,$mdDialog,pageLoader,UserAuthenticationService){	
 	/*
@@ -222,6 +239,7 @@ app.controller("adminDashboardCtrl",function($scope,$http,$state,$mdDialog,pageL
 	UserAuthenticationService.isLoggedInAdmin()
 	.then(response => {
 		if(!response){
+			console.log("NOT LOGGED IN")
 			$state.go("adminLogin",{},{location:false});
 		}
 		else{
@@ -235,7 +253,7 @@ app.controller("adminDashboardCtrl",function($scope,$http,$state,$mdDialog,pageL
 	    		}    			
 	    	}
 			$scope.loadEvents = function(){
-				$http.get("rest/getAllEvents")
+				$http.get("getAllEvents")
 				.then(function(response){
 					$scope.eventList = response.data;			
 					$scope.setThisEventActive(0);//MARK THE FIRST EVENT AS ACTIVE BY DEAFAULT
@@ -252,8 +270,9 @@ app.controller("adminDashboardCtrl",function($scope,$http,$state,$mdDialog,pageL
 							is_active : !event['isactive']
 						}
 				}
-				$http.get("rest/disableEvent",config)
+				$http.get("disableEvent",config)
 				.then(function(response){
+					//console.log("EVENT STATUS CHANGED" + response);
 				},function(error){
 					console.log("THERE HAS BEEN AN ERROR IN QUERYING THE DATABASE"+error);
 				})
@@ -262,6 +281,8 @@ app.controller("adminDashboardCtrl",function($scope,$http,$state,$mdDialog,pageL
 				$scope.setThisEventActive(index)
 				$scope.activeEvent['showAccess'] = true
 			}
+
+			
 			
 			/* 
 			 * SET THE SELECTED EVENT AS ACTIVE
@@ -281,7 +302,7 @@ app.controller("adminDashboardCtrl",function($scope,$http,$state,$mdDialog,pageL
 							tagId : tagId,
 						}
 				}
-				$http.get("rest/getEventGraphData",config)
+				$http.get("getEventGraphData",config)
 				.then(response =>{
 					var graphData = $scope.graphData = response.data;				
 					var seriesArray =[];
@@ -301,10 +322,15 @@ app.controller("adminDashboardCtrl",function($scope,$http,$state,$mdDialog,pageL
 							seriesArray[j]['data'].push(tempObject);
 						}
 					}
+					console.log(seriesArray)
 					constructGraph(seriesArray);				
 				})
 				.catch(err=> console.log("ERROR GETTING GRAPH"+err));
 			}
+			
+			
+			
+			
 			/*
 			 * GET ALL TAGS RELATED TO THE EVENT
 			 */
@@ -314,7 +340,7 @@ app.controller("adminDashboardCtrl",function($scope,$http,$state,$mdDialog,pageL
 							eventId : eventId
 						}
 				}
-				$http.get("rest/getTagsFromEventId",config)
+				$http.get("getTagsFromEventId",config)
 				.then(function(response){
 					$scope.tagsList = response.data
 				},function(error){
@@ -328,6 +354,7 @@ app.controller("adminDashboardCtrl",function($scope,$http,$state,$mdDialog,pageL
 			$scope.deleteTag = function(index){
 				$scope.currentTagsList.splice(index,1);
 			}
+			
 			/*
 			 * EDIT TAG WHICH ARE NOT IN DATABASE
 			 */
@@ -351,6 +378,7 @@ app.controller("adminDashboardCtrl",function($scope,$http,$state,$mdDialog,pageL
 				.then(function(answer){	
 					console.log(answer);
 					$scope.currentTagsList[index] = response
+					//$scope.getTagsForEventId($scope.activeEvent['id']);
 				},function(){
 					
 				})
@@ -358,7 +386,7 @@ app.controller("adminDashboardCtrl",function($scope,$http,$state,$mdDialog,pageL
 			
 			$scope.saveTagChanges = function(){
 				if($scope.currentTagsList.length >0 ){
-					$http.post('rest/postNewTag',$scope.currentTagsList)
+					$http.post('postNewTag',$scope.currentTagsList)
 					.then(response => {
 						$scope.currentTagsList = [];
 						$scope.getTagsForEventId($scope.activeEvent['id']);
@@ -395,23 +423,7 @@ app.controller("adminDashboardCtrl",function($scope,$http,$state,$mdDialog,pageL
 				      fullscreen: false
 				})
 				.then(function(response){
-					$scope.currentTagsList.push(response)
-				},function(){
-					console.log("CREATION CANCELLED");
-				});
-			}
-			
-			$scope.openCreateAgendaModal = function(ev){
-				$mdDialog.show({
-					  controller: 'adminEventAgendaModalCtrl',
-				      templateUrl: 'views/modals/adminEventAgendaModal.html',
-				      parent: angular.element(document.body),
-				      targetEvent: ev,
-				      clickOutsideToClose:true,
-				      locals:{eventData:{eventId : $scope.activeEvent['id']}},
-				      fullscreen: true
-				})
-				.then(function(response){
+					console.log(response);
 					$scope.currentTagsList.push(response)
 				},function(){
 					console.log("CREATION CANCELLED");
@@ -425,9 +437,9 @@ app.controller("adminDashboardCtrl",function($scope,$http,$state,$mdDialog,pageL
 	
 });
 
-//////////////////////////////////////////////////////////////////////////////////////
-////////////////          CONTROLLER FOR ADMIN LOGIN     /////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
+//////////////          CONTROLLER FOR ADMIN LOGIN     /////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
 app.controller("adminLoginCtrl",function($scope,$state,UserAuthenticationService){
 	UserAuthenticationService.isLoggedInAdmin()
 	.then(response => {
@@ -460,39 +472,93 @@ app.controller("adminLoginCtrl",function($scope,$state,UserAuthenticationService
 });
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-////////////////CONTROLLER FOR USER LOGIN        /////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
+//////////////CONTROLLER FOR USER LOGIN        /////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
 
 app.controller("userLoginCtrl",function($scope,$http,$mdDialog,$state,pageLoader,UserAuthenticationService){
-
-			pageLoader.setLoading(false);
-			$scope.askAccess = function(ev) {				
+	pageLoader.setLoading(true);
+	$scope.loadEvents = function(){
+		$http.get("getActiveEvents")
+		.then(function(response){
+			$scope.eventList = response.data;
+		},function(error){
+			console.log("THERE HAS BEEN AN ERROR IN QUERYING THE DATABASE"+error);
+		});
+	}	
+	$scope.loadEvents();
+	pageLoader.setLoading(false);
+	$scope.askAccess = function(ev,index) {
+		var event = $scope.eventList[index]		
+		UserAuthenticationService.isLoggedInUser(event['name'].trim()+event.id)
+		.then(loggedIn => {
+			if(loggedIn){
+				$state.go('userDashboard',{eventName:event.name,eventId:event.id});
+			}
+			else{
 				$mdDialog.show({
 					controller: 'eventLoginModalController',
 					templateUrl: 'views/modals/eventLoginModal.html',
 					parent: angular.element(document.body),
 					targetEvent: ev,
 					clickOutsideToClose:true,
+					locals:{eventData:event},
 					fullscreen: false
 				})
 				.then(function(match) {
-					if(match){												
-						$state.go('userDashboard');						
+					if(match){
+						$state.go('userDashboard',{eventName:event.name,eventId:event.id});
 					}
 				}, function() {
 					console.log('You cancelled the dialog.');
 				});
 			}
+			
+		})
+		.catch(err=>console.log(err));
+		
+	};
+
 
 });
-//////////////////////////////////////////////////////////////////////////////////////
-////////////////        CONTROLLER FOR USER DASHBOARD    /////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////
-app.controller("userDashboardCtrl",function($scope,$http,$state,$stateParams,$mdDialog,pageLoader,UserAuthenticationService){
+////////////////////////////////////////////////////////////////////////////////////
+//////////////        CONTROLLER FOR USER DASHBOARD    /////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
+app.controller("userDashboardCtrl",function($scope,$http,$state,$q,$stateParams,$mdDialog,pageLoader,UserAuthenticationService){
 	pageLoader.setLoading(true);
-	$scope.isAdmin = false	
-	$scope.eventData = $stateParams.eventData;
+	$scope.eventId = $stateParams.eventId;	
+	$scope.eventName = $stateParams.eventName;
+	var config ={
+			params:{
+				eventId : $scope.eventId
+			}
+	}
+	$scope.isAdmin = false
+	$scope.logout = function(){
+		if(UserAuthenticationService.logout($scope.isAdmin)){
+			$state.go("userLogin",{},{location:false})
+		}
+		else{
+			console.log("UNABLE TO LOGOUT")
+		}
+	}
+	var checkEventID = function(){
+		return $q((resolve,reject) => {
+			if($scope.eventName == null){
+    			return $http.get("getEventNameFromId",config)
+    			.then(response => {
+    				$scope.eventName = response.data[0].trim()
+    				return resolve($scope.eventName);
+    			});
+    		}
+    		else{
+    			return resolve($scope.eventName);
+    		}
+		})
+		
+	}
+	
+	
 	var showPage = function(){
 		$scope.emoList=[
 			{name:'upset',icon:'upset'},
@@ -501,12 +567,8 @@ app.controller("userDashboardCtrl",function($scope,$http,$state,$stateParams,$md
 			{name:'happy',icon:'happy'},
 			{name:'glad',icon:'glad'}
 		]
-		var config ={
-				params:{
-					eventId : $scope.eventData.id
-				}
-		}
-		$http.get('rest/allTagPercents',config)
+			
+		$http.get('allTagPercents',config)
 			.then(function(response){
 				$scope.hashtagList =response.data;
 				pageLoader.setLoading(false);
@@ -517,77 +579,79 @@ app.controller("userDashboardCtrl",function($scope,$http,$state,$stateParams,$md
 		$scope.goToPostScreen = function(index){
 			pageLoader.setLoading(true);
 			var selTagData = $scope.hashtagList[index];
-			$state.go('userPostScreen', {tagId : selTagData.id,tagName:selTagData.name ,tagDesc:selTagData.desc,eventData:$scope.eventData});
-		}
-		$scope.logout = function(){
-			if(UserAuthenticationService.logout($scope.isAdmin)){
-				$state.go("userLogin",{},{location:false})
-			}
-			else{
-				console.log("UNABLE TO LOGOUT")
-			}
-		}
-		
-		$scope.showAgenda = function(ev){
-			$mdDialog.show({
-				controller: 'userEventAgendaModalCtrl',
-				templateUrl: 'views/modals/userEventAgendaModal.html',
-				parent: angular.element(document.body),
-				targetEvent: ev,
-				clickOutsideToClose:true,
-				locals:{eventData:$scope.eventData},
-				fullscreen: true
-			})
-			.then(function(answer) {				
-			}, function() {
-				console.log('You cancelled the dialog.');
-			});
-		}
-		
-		$scope.showQuestions = function(ev){
-			$mdDialog.show({
-				controller: 'userQuestionsModalCtrl',
-				templateUrl: 'views/modals/userQuestionsModal.html',
-				parent: angular.element(document.body),
-				targetEvent: ev,
-				clickOutsideToClose:true,
-				locals:{eventData:$scope.eventData},
-				fullscreen: true
-			})
-			.then(function(answer) {				
-			}, function() {
-				console.log('You cancelled the dialog.');
-			});
+			$state.go('userPostScreen', {tagId : selTagData.id,tagName:selTagData.name ,tagDesc:selTagData.desc,eventId:$scope.eventId,eventName:$scope.eventName });
 		}
 	}
-	showPage();
+	
+	
+	checkEventID()
+	.then(result => {
+		UserAuthenticationService.isLoggedInUser($scope.eventName.trim()+$scope.eventId)
+		.then(loggedIn => {
+			if(!loggedIn){
+				$mdDialog.show({
+					controller: 'eventLoginModalController',
+					templateUrl: 'views/modals/eventLoginModal.html',
+					parent: angular.element(document.body),
+					clickOutsideToClose:true,
+					locals:{eventData:{name:$scope.eventName,id:$scope.eventId}},
+					fullscreen: false
+				})
+				.then(function(match) {
+					if(match){
+						showPage();
+					}
+				}, function() {
+					$state.go("userLogin",{},{location:false});
+				});
+				
+				
+			}
+			else{
+				showPage();
+			}
+		})
+		.catch(err => console.log(err))
+	})
+	.catch(error => console.log(error))
+	
+	
+	
 
 });
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-////////////////        CONTROLLER FOR USER POSTSCREEN     ///////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////
-//
-app.controller("userPostScreenCtrl",function($scope,$interval, $q,$state,$stateParams,$http,$timeout,pageLoader,UserAuthenticationService) {
+////////////////////////////////////////////////////////////////////////////////////
+//////////////        CONTROLLER FOR USER POSTSCREEN     ///////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
+
+app.controller("userPostScreenCtrl",function($scope, $q,$state,$stateParams,$http,$timeout,$mdDialog,pageLoader,UserAuthenticationService) {
 		/*
 		 * INIT ALL STATEPARAMS
 		 * 
 		 */
 		pageLoader.setLoading(true);
         $scope.tagId = $stateParams.tagId;
-        $scope.intervalPromise;
-        
         if($stateParams.tagName !==null){
         	$scope.tagName = $stateParams.tagName.trim();
         }
         if($stateParams.tagDesc !== null){
         	$scope.tagDesc = $stateParams.tagDesc;
         }
+        $scope.eventId = $stateParams.eventId;	
+    	$scope.eventName = $stateParams.eventName;
+    	// fetch eventName if not present 
+    	var config ={
+    			params:{
+    				eventId : $scope.eventId
+    			}
+    	}
     	/*
     	 * END INIT STATEPARAMS
     	 * 
     	 */
+    	
+    	
     	$scope.isAdmin = false
     	$scope.logout = function(){
     		if(UserAuthenticationService.logout($scope.isAdmin)){
@@ -597,10 +661,27 @@ app.controller("userPostScreenCtrl",function($scope,$interval, $q,$state,$stateP
     			console.log("UNABLE TO LOGOUT")
     		}
     	}
-    	var showPage = function(){    		
+    	var checkEventID = function(){
+    		return $q((resolve,reject) => {
+    			if($scope.eventName == null){
+        			return $http.get("getEventNameFromId",config)
+        			.then(response => {
+        				$scope.eventName = response.data[0].trim()
+        				return resolve($scope.eventName);
+        			});
+        		}
+        		else{
+        			return resolve($scope.eventName);
+        		}
+    		})
+    		
+    	}
+    	
+    	var showPage = function(){
+    		
     		$scope.curListTweets=[];
 	    	$scope.prevListTweets=[];
-	    	$scope.curTimeMS = 0;           	    	
+	    	$scope.curTime=new Date();            	    	
 	    	$scope.emoList=[            	    		
 	    		{name:'upset',icon:'upset'},
 	    		{name:'sad',icon:'sad'},
@@ -611,32 +692,11 @@ app.controller("userPostScreenCtrl",function($scope,$interval, $q,$state,$stateP
 	    	
 	    	$scope.preload=function(){	
 	    		$scope.loadPercentgraph();
-	    		$scope.getTweets($scope.curTimeMS,$scope.tagId);
-    			$scope.intervalPromise = $interval(function(){
-    				$scope.getTweets();
-    			}, 2000);
-	    		
-	    		
-	    		
-//	    		var refreshingPromise; 
-//	    		var isRefreshing = false;  
-//	    		$scope.startRefreshing(refreshingPromise,isRefreshing);	    		 		
+	    		$scope.getTweets();    		
+	    		setInterval($scope.getTweets, 2000);    		
 	    	}
-
-	    	$scope.$on('$destroy',function(){
-	    	    if($scope.intervalPromise)
-	    	        $interval.cancel($scope.intervalPromise);   
-	    	});
-//	    	$scope.startRefreshing = function(refreshingPromise,isRefreshing){
-//    		   if(isRefreshing) return;
-//    		   isRefreshing = true;
-//    		   (function refreshEvery(){
-//    			   	 $scope.getTweets()
-//    		         refreshingPromise = $timeout(refreshEvery,2000);
-//    		    }());
-//	    	}
+	    	pageLoader.setLoading(false);
 	    	
-	    	pageLoader.setLoading(false);	    	
 	    	$scope.postTweet = function(){
 	    		$scope.copyTweet = $scope.selTweet;
 	    		$scope.selTweet='';
@@ -648,8 +708,9 @@ app.controller("userPostScreenCtrl",function($scope,$interval, $q,$state,$stateP
 	    						selTweet:$scope.copyTweet
 	    					}
 	    				}
-	    			$http.get("rest/postTweet",config)
+	    			$http.get("postTweet",config)
 	    			.then(function(response){
+	    				console.log("POSTED SUCCESSFULLY!!",response);
 	    			});
 	    			
 	    		}
@@ -663,27 +724,26 @@ app.controller("userPostScreenCtrl",function($scope,$interval, $q,$state,$stateP
 	    		$scope.selTweet='';
 	    	}    	
 	    	
-		    $scope.getTweets=function(timeLastUpdate,tagId){ 
-		    	console.log(timeLastUpdate + "TAG ID IS" + tagId);
-		    	console.log($scope.curTimeMS)
+		    $scope.getTweets=function(){ 
 	    		var config={
 	    				params:{
-	    					curTimeMS:timeLastUpdate || $scope.curTimeMS,
-	    					hashTag:tagId || $scope.tagId
+	    					curTimeMS:$scope.curTime.getTime(),
+	    					hashTag:$scope.tagId
 	    				}
 	    		}    			
-				$http.get("rest/getTweets",config)
+				$http.get("getTweets",config)
 				.then(function(response){
 					if(response.data.length>0){
-						$scope.curTimeMS =Number(response.data[response.data.length - 1]['created_on']);						
+						$scope.curTime=new Date();
 						$scope.prevListTweets=$scope.curListTweets;
-						$scope.curListTweets=$scope.prevListTweets.concat(response.data);						
+						$scope.curListTweets=$scope.prevListTweets.concat(response.data);
 						$timeout(function () {    						
 							var objDiv = document.getElementById("tweetContainer");						
 							objDiv.scrollTop = objDiv.scrollHeight+1000;    						
-					    }, 0,false);						
+					    }, 0,false);
+						
 						$scope.loadPercentgraph();
-					}
+					}			
 				},function(error){
 					console.log("THERE HAS BEEN AN ERROR IN QUERYING THE DATABASE"+error);
 				});
@@ -695,7 +755,7 @@ app.controller("userPostScreenCtrl",function($scope,$interval, $q,$state,$stateP
 							selTag:$scope.tagId
 						}
 				}
-		    	$http.get("rest/perTagPercents",config)
+		    	$http.get("perTagPercents",config)
 				.then(function(response){
 					$scope.emoPercents = response.data[0];
 					if($scope.tagName == null){
@@ -707,37 +767,60 @@ app.controller("userPostScreenCtrl",function($scope,$interval, $q,$state,$stateP
 				},function(error){
 					console.log("THERE HAS BEEN AN ERROR IN QUERYING THE DATABASE"+error);
 				});
-		    }		    
+		    }
+		    
 		    $scope.preload();
     	}
-    	showPage();
+    	
+    	
+    	checkEventID()
+    	.then(result => {
+    		UserAuthenticationService.isLoggedInUser($scope.eventName.trim()+$scope.eventId)
+        	.then(loggedIn => {
+        		if(!loggedIn){
+        			$mdDialog.show({
+    					controller: 'eventLoginModalController',
+    					templateUrl: 'views/modals/eventLoginModal.html',
+    					parent: angular.element(document.body),
+    					clickOutsideToClose:true,
+    					locals:{eventData:{name:$scope.eventName.trim(),id:$scope.eventId}},
+    					fullscreen: false
+    				})
+    				.then(function(match) {
+    					if(match){
+    						showPage();
+    					}
+    				}, function() {
+    					$state.go("userLogin",{},{location:false});
+    				});
+            	}
+            	else{
+            		 showPage();
+            		
+            	}
+        	})
+        	.catch(err => console.log(err)) 
+    	})
+    	.catch(error => console.log(error))
+    	
+    	
+       
 
 });
 
 
-app.controller('userQuestionScreenCtrl',function($scope,pageLoader,UserAuthenticationService,$state,$stateParams,$http){
-	$scope.logout = function(){
-		if(UserAuthenticationService.logout($scope.isAdmin)){
-			$state.go("userLogin",{},{location:false})
-		}
-		else{
-			console.log("UNABLE TO LOGOUT")
-		}
-	}
-});
-
-//////////////////////////////////////////////////////////////////////////////////////
-////////////////        CONTROLLER FOR TOP HEADER Component     ///////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
+//////////////        CONTROLLER FOR TOP HEADER Component     ///////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
 
 app.controller("iexpressHeaderCtrl",function($scope){
 	
 	
 });
 
-//////////////////////////////////////////////////////////////////////////////////////
-////////////////        CONTROLLER FOR LOADING PROGRESS Component     ////////////////
-//////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
+//////////////        CONTROLLER FOR LOADING PROGRESS Component     ////////////////
+////////////////////////////////////////////////////////////////////////////////////
 
 app.controller("iexpressLoaderCtrl",function($scope,pageLoader,$timeout){
 	$scope.activeLoading = function(){
@@ -747,13 +830,14 @@ app.controller("iexpressLoaderCtrl",function($scope,pageLoader,$timeout){
 });
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-////////////////        CONTROLLER FOR USER EVENT LOGIN Modal     ////////////////////
-//////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
+//////////////        CONTROLLER FOR USER EVENT LOGIN Modal     ////////////////////
+////////////////////////////////////////////////////////////////////////////////////
 
-app.controller("eventLoginModalController",function($scope,$mdDialog,UserAuthenticationService){	
-	$scope.codeLength = 5;
+app.controller("eventLoginModalController",function($scope,$mdDialog,UserAuthenticationService,eventData){	
+	$scope.codeLength = 25;
 	$scope.accessCode = "";
+	$scope.eventData = eventData;
 	
 	$scope.hide = function() {
 	      $mdDialog.hide();
@@ -765,10 +849,10 @@ app.controller("eventLoginModalController",function($scope,$mdDialog,UserAuthent
     $scope.answer = function(answer) {
     	if(answer.length == $scope.codeLength){
     		$scope.errorMessages = {'lengthError' : false};
-    		UserAuthenticationService.loginUser(answer)
+    		UserAuthenticationService.loginUser(eventData.id,eventData.name,answer)
     		.then(access_granted => {
     			if(access_granted){
-    				$mdDialog.hide(true);
+        			$mdDialog.hide(true);
         		}
         		else{
         			$scope.errorMessages = {'accessCodeError' : true};
@@ -791,7 +875,7 @@ app.controller("createEventModalController",function($scope,$http,$mdDialog){
 					description: $scope.description
 				}
 		}
-		$http.get("rest/postNewEvent",config)	
+		$http.get("postNewEvent",config)	
 		.then(function(response){
 			$mdDialog.hide("DONE");
 		},function(error){
@@ -813,16 +897,28 @@ app.controller("createEventModalController",function($scope,$http,$mdDialog){
 app.controller("createTagModalController",function($scope,$http,$mdDialog,eventData){
 	
 	$scope.description ="";
-	$scope.createTag = function(){	
+	$scope.createTag = function(){
+//		var config ={
+//				params:{
+//					name:$scope.name,
+//					description: $scope.description,
+//					eventId : eventData.eventId
+//				}
+//		}
+//		$http.get("postNewTag",config)	
+//		.then(function(response){
 		$mdDialog.hide({
-			name:$scope.name,
-			description: $scope.description,
-			event_id : eventData.eventId
-		});	
-	}	
+				name:$scope.name,
+				description: $scope.description,
+				event_id : eventData.eventId
+			});
+
+	}
+	
 	$scope.hide = function() {
 	      $mdDialog.hide();
-	}	
+	};
+	
 	$scope.cancel = function(){
 		$mdDialog.cancel();
 	}
@@ -848,215 +944,9 @@ app.controller("editTagModalController",function($scope,$http,$mdDialog,tagData)
 		$mdDialog.cancel();
 	}
 });
-
-
-app.controller('adminEventAgendaModalCtrl',function($scope,$mdDialog,$http,$filter,eventData,mdcDateTimeDialog){
-
-	$scope.unsavedAgendaList = [];
-	$scope.savedAgendaList = [];
-	$scope.curAgenda = {};
-	$scope.displayTime = {}
-	//$scope.curAgendaStartTime,curAgendEndTime,curAgendaDescription
-	$scope.hide = function() {
-	      $mdDialog.hide();
-	};
-	
-	$scope.cancel = function(){
-		$mdDialog.cancel();
-	}
-	
-	$scope.addNewAgendaItem = function(){
-		if($scope.curAgenda.agenda.length>0){
-			$scope.showAgendaInput = false;
-			$scope.curAgenda.event_id = eventData.eventId;
-			$scope.unsavedAgendaList.push($scope.curAgenda);
-			$scope.curAgenda = {};
-			$scope.displayTime ={};
-		}
-		else{
-			$scope.errorMessages = {
-					required:true
-			}
-		}
-	}
-	$scope.displayDateDialog = function (nameOfTime) {
-		if(nameOfTime == 'start_time'){
-			var config = {
-	          maxDate: $scope.curAgenda.end_time,
-	          time: true
-			}
-		}
-		else if(nameOfTime == 'end_time'){
-			var config = {			          
-	          minDate: $scope.curAgenda.start_time,
-	          time: true
-			}
-		}
-        mdcDateTimeDialog.show(config)
-       .then(function (date) {        	  
-    	  $scope.curAgenda[nameOfTime] = date.getTime()
-    	  $scope.displayTime[nameOfTime] = $filter('date')(date, 'dd MMM yyyy hh:mm a');
-       }, function() {
-        console.log('Selection canceled');
-       });
-   }
-	
-	$scope.cancelAgendaInput = function(){
-			$scope.displayTime = {}
-			$scope.showAgendaInput = false
-	}
-	
-	$scope.saveAgenda = function(){		
-		$http.post('rest/postEventAgenda',$scope.unsavedAgendaList)
-		.then(response =>{
-			$scope.getEventAgenda();
-			$scope.unsavedAgendaList = [];
-		})
-		.catch(err => console.log(err))
-	}
-	
-	$scope.getEventAgenda = function(){
-		var config = {
-				params:{
-					event_id: eventData.eventId
-				}
-		}
-		$http.get('rest/loadEventAgenda',config)
-		.then(response =>{
-			$scope.savedAgendaList = response.data;
-			//console.log($scope.savedAgendaList);
-		})
-	}
-	$scope.getEventAgenda();
-});
-
-app.controller('userEventAgendaModalCtrl',function($scope,$mdDialog,$http,eventData){
-
-	$scope.hide = function() {
-	      $mdDialog.hide();
-	};
-	
-	$scope.cancel = function(){
-		$mdDialog.cancel();
-	}
-	
-	$scope.getEventAgenda = function(){
-		var config = {
-				params:{
-					event_id: eventData.id
-				}
-		}
-		$http.get('rest/loadEventAgenda',config)
-		.then(response =>{
-			$scope.agendaList = response.data;
-		})
-	}
-	$scope.getEventAgenda();
-});
-
-app.controller('userQuestionsModalCtrl',function($scope,$mdDialog,$interval,$http,$q,$timeout,eventData){
-	$scope.hide = function() {
-	      $mdDialog.hide();
-	};	
-	$scope.cancel = function(){
-		$mdDialog.cancel();
-	}
-	$scope.lastUpdatedTimeMS = 0;
-	$scope.curListQuests = [];
-	$scope.postQuestion = function(userQuestion,eventId){
-		var config={
-				event_id : eventId || eventData.id,
-				question : userQuestion
-		}
-		return $q((resolve,reject) =>{
-			$http.post("rest/postQuestion",config)
-			.then(response =>{
-				console.log("POSTED QUESTION")
-				resolve(response);
-			})
-			.catch(err=>{
-				console.log(err);
-				resolve(false);
-			})		
-		})
-	}
-	$scope.askQuestion = function(){		
-		if($scope.curUserQuestion && $scope.curUserQuestion.length > 0){
-			var copyUserQuestion =$scope.curUserQuestion;
-			$scope.curUserQuestion ="";
-			$scope.postQuestion(copyUserQuestion,eventData.id)
-			.then(response => {
-				if(response){
-						//show a toast for 5 seconds
-						console.log("POSTED SUCCESSFULLY");
-				}
-				else{
-					console.log("ERROR OCCURED WHILE POSTING.. ")
-					//show toast with error message for 5 seconds
-				}
-			})
-		}
-		else{
-			//show toast with error message for 5 seconds
-			console.log("QUESTION CANNOT BE EMPTY");
-		}	
-	}
-	
-	$scope.likeQuestion = function($index,questionId){
-		var config={
-				id : questionId
-		}
-		$http.post('rest/likeQuestion',config)
-		.then(response => {
-			console.log(response.data);
-		})
-		.catch(err => {
-			//do something // show a toast maybe
-		})
-	}
-	
-	$scope.loadQuestions = function(lastUpdateTimeMS){
-		var config = {
-				created_on : lastUpdateTimeMS || $scope.lastUpdatedTimeMS,
-				event_id : eventData.id
-		}		
-		console.log(lastUpdateTimeMS)
-		$http.post('rest/loadQuestions',config)
-		.then(response =>{
-			if(response.data && response.data.length>0){
-				$scope.lastUpdatedTimeMS =Number(response.data[response.data.length - 1]['created_on']);
-				$scope.curListQuests=$scope.curListQuests.concat(response.data);						
-				$timeout(function () {    						
-					var objDiv = document.getElementById("questionContainer");						
-					objDiv.scrollTop = objDiv.scrollHeight+1000;    						
-			    }, 0,false);
-			}
-			
-		},function(err){
-			console.log(err);
-		})
-	}
-	
-	$scope.refreshQuestions =function(){
-		$scope.intervalPromise = $interval(function(){
-			$scope.loadQuestions();
-		},2000)
-	}
-	
-	$scope.preload = function(){
-		$scope.loadQuestions($scope.lastUpdatedTimeMS);
-		$scope.refreshQuestions();
-	}
-	$scope.preload();
-	$scope.$on('$destroy',function(){
-		if($scope.intervalPromise)
-	        $interval.cancel($scope.intervalPromise);
-	});
-});
-
-///*
-// * 
-// * END CONTROLLERS
-// * 
-// * 
-// */
+/*
+ * 
+ * END CONTROLLERS
+ * 
+ * 
+ */

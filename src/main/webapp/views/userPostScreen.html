@@ -1,46 +1,49 @@
 <div class="userPostScreenHeader" layout="row">
-	<!--<a ui-sref="userDashboard"><md-icon md-svg-src="images/icons/arrow_back.svg" aria-label="sentiment"></md-icon></a>  -->
-	<div layout="column" layout-align="start start" flex>
-		<h4>{{tagName}}</h4>
-		<h5>{{tagDesc}}</h5>
+	<!--<a ui-sref="userDashboard"><md-icon md-svg-icon="arrow_back" aria-label="sentiment"></md-icon></a>  -->
+	<div layout="column" layout-align="center start" flex>
+		<h4 class="headings">{{tagName}}</h4>
+		<h5 class="headings">{{tagDesc}}</h5>
 	</div>	
 	<md-button aria-label="Logout" ng-click ="logout()">
 		  <md-tooltip md-direction="bottom">Logout</md-tooltip>
-          <md-icon class="md-warn icon-30" md-svg-src="images/icons/logout.svg"></md-icon>
+          <md-icon class="md-warn icon-30" md-svg-icon="logout"></md-icon>
      </md-button>
 </div>
 
-<div class="userPostScreenContainer">
-	<div class="postContainer" id="tweetContainer">
-		<h3>Dashboard</h3>
-		<div ng-repeat="tweet in curListTweets" class="card">
-			<div style="flex:1;">
-				<div class="cardTitle" style="font-weight: 800; text-decoration: underline; font-style: italic; color: #7d7d7d;">{{tweet.tag_id}}</div>
-				<div class="cardMessage">{{tweet.message}}</div>
-			</div>
-			
-			<div class="emojiWrapper -{{emoList[tweet.sentiment].name}}">
-				<md-icon class="icon-30" md-svg-src="{{emoList[tweet.sentiment].icon}}" aria-label="sentiment"></md-icon>
-			</div>
-		</div>
-	</div>
-	<div class="formContainer">
-		<div class="column" style="width: 100%">						
-			<textarea placeholder="Write something here....." maxlength="250"
+<div class="userPostScreenContainer padding-horizontal-10" layout="row">
+	<div class="userformContainer userContainer padding-horizontal-10 padding-vertical-10">
+		<div layout="column">
+			<h4>Add your comments</h4>						
+			<textarea placeholder="Write your thoughts here ..." maxlength="250"
 				ng-model="selTweet" required>
 			</textarea>
 			<br>
+			<md-button class="md-warn md-raised md-hue-2 margin-0" ng-click="postTweet()">POST</md-button>
 			<br>
-			<md-button class="md-warn md-raised md-hue-2">POST</md-button>
 			<br>
-			<br>
-			<div class="percentContainer" layout="row" layout-align="space-around center">
+			<div class="percentContainer" layout="row" layout-align="space-between center">
 	            <div ng-repeat="emotion in emoList" class="emojiWrapper -{{emotion.name}}">
-	               <md-icon class="icon-30" md-svg-src="{{emotion.icon}}" aria-label="sentiment"></md-icon>
+	               <md-icon class="icon-30" md-svg-icon="{{emotion.icon}}" aria-label="sentiment"></md-icon>
 	               <div class="emoPercent">{{emoPercents[emotion.name]/emoPercents['total']*100 | number: 2}}%</div>
 	               <md-progress-linear md-mode="determinate" value="{{emoPercents[emotion.name]/emoPercents['total']*100}}"></md-progress-linear>
 	            </div>
           	</div>
 		</div>
 	</div>
+	<div class="userContainer padding-horizontal-10 padding-vertical-10">
+		<h4>Other Responses</h4>
+		<div class="postedCommentsContainer" id="tweetContainer">
+			<div ng-repeat="tweet in curListTweets" class="card" layout="row" layout-align="space-between center">
+				<div flex>
+					<!--<div class="cardTitle">{{tweet.tag_id}}</div>  -->
+					<div class="cardMessage font-12">{{tweet.message}}</div>
+				</div>			
+				<div class="emojiWrapper -{{emoList[tweet.sentiment].name}}">
+					<md-icon class="icon-30 padding-horzontal-10 margin-left-10" md-svg-icon="{{emoList[tweet.sentiment].icon}}" aria-label="sentiment"></md-icon>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+	
 </div>

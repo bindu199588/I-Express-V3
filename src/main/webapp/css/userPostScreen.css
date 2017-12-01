@@ -1,62 +1,63 @@
-.userPostScreenContainer{
-	display: flex;
+.userPostScreenContainer ,.userQuestionsContainer{
     flex-wrap: wrap;
-    padding: 0px  25px;
 	
 }
-.userPostScreenContainer .postContainer,.userPostScreenContainer .formContainer{
+.userPostScreenContainer{
+    flex-wrap: wrap;
+	
+}
+.userContainer{
 	flex: 1 1 360px;
-	padding:10px;	
+	overflow: hidden;
+    max-height:calc(100vh - 150px);
 }
-.userPostScreenContainer .postContainer{
-	max-height:100vh;
-	height:	600px;
-	overflow-y:scroll;
-	
+.postedCommentsContainer{
+	height: 90%;
+	overflow-y:scroll;	
 }
-
 @media screen and (max-device-width: 480px){
 	.userPostScreenContainer{
-		padding: 0px 5px;
+		padding: 0px 5px!important;
 	}
-	.userPostScreenContainer .postContainer{
-		height: 320px;
+	.userContainer{
+		height: auto;
+    	max-height: 500px;
 	}
 }
 
-
-.userPostScreenHeader a{
-	float:left;
-}
-.userPostScreenHeader h4, .userPostScreenHeader h5{
-	text-align:left;
-	margin:0px 0px 5px 10px;
-}
-
-
-.userPostScreenContainer .formContainer button {
-	background: #e6343b;
-}
-
-.userPostScreenContainer .formContainer textarea:focus {
+.userformContainer textarea:focus {
 	outline: none !important;
 	border: 1px solid rgba(0, 0, 0, .8);
 }
 
-.userPostScreenContainer .formContainer textarea {
+.userformContainer textarea {
 	border: 1px solid #D8D8D8;
     background-color: white;
-    height: 100px;
-    width: 95%;
+    height: 75px;
+    /*width: 95%;*/
     color: black;
     font-weight: 100;
     padding: 10px;
+    flex:1;
+}
+.userformContainer>div{
+	max-width: 650px;
+}
+.postedCommentsContainer .card{
+	margin-bottom: 16px;
+    background-color: #f7f7f7;
+    padding: 5px 16px;
+    box-shadow: 5px 5px 15px #ccc;
+    border-radius: 30px;
+    width: fit-content;  
+    width: -moz-fit-content;  
+    max-width: 96%;
 }
 
 
-.userPostScreenContainer  .postContainer .card{
-	display:flex;
-	margin-bottom:16px;
-    background-color: #f7f7f7;
-    padding: 10px 16px;
+#questionContainer .md-button.md-fab.md-mini-30 {
+    width: 30px;
+    height: 30px;
+    min-height:0px;
+    minwidth:0px;
 }

@@ -4,7 +4,8 @@
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta name="author" content="naga-himabindu.akella">
-		<link rel="stylesheet" type="text/css" href="UI_library/angular-material.min.css"/>
+		<link rel="stylesheet" type="text/css" href="UI_library/material/1.1.1/angular-material.min.css"/>
+		<link rel="stylesheet" type="text/css" href="UI_library/material-datetimepicker.min.css"/>
 		<link rel="stylesheet" type="text/css" href="master.css"/>
 		<title>IExpress</title>
 	</head>
@@ -13,8 +14,7 @@
 		<iexpress-header class="iexpress-header"></iexpress-header>
 		<iexpress-loader class="iexpress-loader"></iexpress-loader>
 		<div class="mainContainer {{$state.current.name}}" ui-view></div>
-		<footer class="appFooter">
-			
+		<footer class="appFooter font-8" layout="center" layout-align = "center">			
 		    <p>IExpress - Developed By - MITS/DAT/AAD Team</p>
 		</footer>
 		<!--
@@ -30,13 +30,15 @@
 		<script src = "UI_library/angular-animate.min.js"></script>
 		<script src = "UI_library/angular-aria.min.js"></script>
 		<script src = "UI_library/angular-messages.min.js"></script>
-		<script src = "UI_library/angular-material.min.js"></script>
-		
+		<script src = "UI_library/material/1.1.1/angular-material.min.js"></script>
+		<script src = "UI_library/moment.min.js"></script>
+		<script src = "UI_library/angular-material-datetimepicker.min.js"></script>
 		<script src="UI_library/jquery.min.js"></script>			
 		<script src="UI_library/highcharts.js"></script> 
 		
 		<script src = "js/graph.js"></script>
 		<script src = "js/master.js"></script>
+		<script src = "js/authenticate.js"></script>
 		<script src = "js/routes.js"></script>
 		<script src = "js/components.js"></script>
 		<script src = ""/>

@@ -9,43 +9,49 @@ app.config(function($stateProvider, $urlRouterProvider){
 		url:	"/adminLogin",
 		templateUrl : "views/adminLogin.html",
 		controller:"adminLoginCtrl",
-		isAdmin : true
+		isAdmin : true,
+		redirectPage: 'adminDashboard'
 	})
 	.state("adminDashboard",{
 		url:	"/adminDashboard",
 		templateUrl:	"views/adminDashboard.html",
 		controller:"adminDashboardCtrl",
-		isAdmin : true
-
+		isAdmin : true,
+		authenticate: true
 	})	
 	.state("userLogin",{
 		url:	"/userLogin",
 		templateUrl : "views/userLogin.html",
 		controller:"userLoginCtrl",
-		isAdmin : false
-
+		isAdmin : false,
+		redirectPage: 'userDashboard',
+		params:{
+			event: null
+		}
 	})
 	.state("userDashboard",{
-		url:	"/userDashboard/:eventId",
+		url:	"/userDashboard",
 		templateUrl : "views/userDashboard.html",
 		controller:"userDashboardCtrl",
 		params:{
-			eventName : null
+			eventData : null
 		},
-		isAdmin : false
+		isAdmin : false,
+		authenticate: true
 
 	})	
 	.state("userPostScreen",{
-		url:	"/userPostScreen/:eventId/:tagId",
+		url:	"/userPostScreen/:tagId",
 		templateUrl : "views/userPostScreen.html",
 		 params: {
 		        tagName: null,
 		        tagDesc: null,
-		        eventName: null
+		        eventData : null
 		},
 		controller:"userPostScreenCtrl",
-		isAdmin : false
+		isAdmin : false,
+		authenticate: true
 
 	})
-
+	//$urlRouterProvider.deferIntercept(true);
 });

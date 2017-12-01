@@ -1,11 +1,11 @@
 <div class="eventLoginModalContainer modalContainer">
-	<h3>Event - {{eventData.name}}</h3>
+	<h3>Enter Access Code For an Event</h3>
 	<md-input-container>
         <label>Access Code</label>
         <input ng-model="accessCode" type="password">
-        <div class="errorMessages"  role="alert">
+        <div class="errorMessages font-12"  role="alert">
             <div ng-show="errorMessages.lengthError" class="errorMessage">Invalid length for access code. Access code should be of length {{codeLength}}</div>
-            <div ng-show="errorMessages.accessCodeError" class="errorMessage">Incorrect access code</div>
+            <div ng-show="errorMessages.accessCodeError" class="errorMessage">Invalid Access Code</div>
         </div>
     </md-input-container>
 	<md-button class="md-warn md-raised md-hue-2" ng-click="answer(accessCode)">GO</md-button>

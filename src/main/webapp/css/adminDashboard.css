@@ -3,9 +3,9 @@
 }
 
 .graphWrapper, .graphWrapper .subHeadings,#trendsContainer {
-	width: 600px;
+	width: 500px;
     max-width: 100%;
-    flex: 1;
+    flex: 1 1 500px;
 }
 .graphWrapper h4 ,.graphWrapper #graphSelect, .graphWrapper .subHeadings{
 	padding:0px 15px;
@@ -14,37 +14,42 @@
 	flex:1 1 360px;
 	max-width:100%;
 	min-width:360px;
-	max-height:450px;
+	max-height:600px;
 	padding:0px 15px;
-	overflow-y:scroll;
 }
-
-
+.graphWrapper .subHeadings{
+	width: -moz-fit-content;
+}
 .dashboardWrapper .adminWrappers{
 	margin:0px auto;
 }
 
 .dashboardWrapper .adminWrappers button{
-	width: fit-content;
     margin: 6px 0px;
 }
 
-.adminEventListWrapper .adminEventsWrapper{
+.adminEventsWrapper{
 	overflow-y:scroll;
+	max-height:350px;
 }
 
 .adminHashtagListWrapper{
 	
 }
-.adminEventItem{
+.listItem{
 	padding: 0px 10px;
 	border-bottom: 1px dotted lightgrey;
 }
     
-.adminEventItem:hover{
+.listItem:hover{
 	background-color:#f7f7f7;
-	cursor:pointer;
+
 }
+.listItem.adminEventItem:hover{
+	cursor:pointer;
+
+}
+	
 .adminEventItem .adminEventName:hover{
 	text-decoration:underline;
 }
@@ -54,4 +59,50 @@
 
 .adminHashtagListWrapper .adminEventName{
 	margin:16px 0;
+}
+
+.dtp>.dtp-content>.dtp-date-view>header.dtp-header, .dtp div.dtp-date, .dtp table.dtp-picker-days tr>td>a.selected,
+.dtp .dtp-actual-meridien a.selected, .dtp .dtp-picker-time>a.dtp-select-hour.selected,.dtp .dtp-hand.on {
+    background: #c80000;
+}
+
+
+
+.agendaModal{
+	width:376px;
+}
+
+.eventAgendaContainer{
+	overflow-y:scroll;
+}
+.agendaTime{
+	width:30%;
+	color:white;
+}
+
+.agendaTime .date{
+	height:30px;
+	padding:10px;
+	background-color:#b30000;
+}
+
+.agendaTime .time{
+	height:60px;
+	padding: 10px;
+	background-color:#c80000;
+}
+
+.agendaTitle{
+	background-color: lightgrey;
+	width:70%;
+	padding:10px;
+}
+
+
+.greyout .agendaTime .date{
+	background-color:#ababab;
+}
+
+.greyout .agendaTime .time{
+	background-color:#949494;
 }

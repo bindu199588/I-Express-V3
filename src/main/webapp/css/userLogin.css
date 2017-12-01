@@ -1,7 +1,8 @@
 .userLoginContainer{
 	text-align:center;
+	height:100%;
 }
-.eventListWrapper{
+/*.eventListWrapper{
     max-height: calc(100vh - 170px);
     overflow-y: scroll;
     -webkit-flex-wrap: wrap;
@@ -9,7 +10,7 @@
     overflow-x: hidden;
 }
 .eventListWrapper>*{
-    padding:16px 16px;
+    padding:20px;
     flex:1 1 45%;
 }
 .eventItem{
@@ -48,4 +49,4 @@
 	font-style:italic;
 	height: 20px;
     overflow: scroll;
-}
+}*/

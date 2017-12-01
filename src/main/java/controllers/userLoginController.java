@@ -51,22 +51,21 @@ public class userLoginController extends indexController{
 	
 	@RequestMapping(value="/loginUser", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public boolean loginUser(@RequestBody userLoginObject loginObject) throws ClassNotFoundException, SQLException, JsonProcessingException{
+	public String loginUser(@RequestBody String accessCode) throws ClassNotFoundException, SQLException, JsonProcessingException{
 		ResultSet rs;
 		try(Connection con = db.getConnection()){
 			if(con!=null){
-				StringBuilder sb = new StringBuilder("select access_code = ? as match from event where name = ? and id = ?");
+				StringBuilder sb = new StringBuilder("select id,name,description from event where access_code = ? and is_active = true");
 				PreparedStatement pst = con.prepareStatement(sb.toString());
-				pst.setString(1, loginObject.getAccess_code());
-				pst.setString(2, loginObject.getEventName());
-				pst.setLong(3, loginObject.getEventId());
+				pst.setString(1, accessCode);
 				rs = pst.executeQuery();
 				if(rs.next()){
-					return rs.getBoolean("match");
+					eventObject event = new eventObject(rs.getInt("id"), rs.getString("name"), rs.getString("description"), true);
+					return mapper.writeValueAsString(event);
 				}
-				return false;
+				return "";
 			}
 		}
-		return false;
+		return "";
 	}
 }
