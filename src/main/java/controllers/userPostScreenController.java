@@ -5,7 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import javax.naming.NamingException;
@@ -19,7 +18,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import dataObjects.tagEmoPercentObject;
-import dataObjects.tweetObject;
+import dataObjects.xpressionObject;
 
 @Controller
 public class userPostScreenController extends indexController{
@@ -38,7 +37,7 @@ public class userPostScreenController extends indexController{
 		List<tagEmoPercentObject> listOfAllTagPercents = new ArrayList<>();
 		try (Connection con = db.getConnection()) {
 			if (con != null) {
-				System.out.println("!!!!!!!!!!!!!!CONNECTION NOT NULL!!!!!!!!!!!!!!!!!");
+				//System.out.println("!!!!!!!!!!!!!!CONNECTION NOT NULL!!!!!!!!!!!!!!!!!");
 
 				StringBuilder percentQuery = new StringBuilder(
 						"select id,name,description,coalesce(totalCount,0) as total,coalesce(upsetCount,0) as upset ,coalesce(sadCount,0) as sad ,coalesce(neutralcount,0) as neutral ,coalesce(hapCount,0) as hap,coalesce(gladCount,0) as glad");
@@ -99,24 +98,23 @@ public class userPostScreenController extends indexController{
 			@RequestParam(value = "hashTag") String hashtag) throws ClassNotFoundException, SQLException {
 		
 		ResultSet rs;
-		tweetObject temp;
-		List<tweetObject> listObjects = new ArrayList<tweetObject>();
+		xpressionObject temp;
+		List<xpressionObject> listObjects = new ArrayList<xpressionObject>();
 		String jsonString = "";
 
 		try (Connection con = db.getConnection()) {
 
 			if (con != null) {
 				try {
-
-					String selectQuery = "select xpression.message,xpression.sentiment,tag.name from xpression,tag where xpression.created_on > ? and tag_id=tag.id and tag.id=? ";
+					String selectQuery = "select xpression.message,xpression.sentiment,tag.name,floor(extract(epoch from xpression.created_on)*1000) as created_on from xpression,tag where date(xpression.created_on) >= date(now()) and floor(extract(epoch from xpression.created_on)*1000) > ? and tag_id=tag.id and tag.id=? order by xpression.created_on";
 					PreparedStatement pst = con.prepareStatement(selectQuery);
-					java.sql.Timestamp sq = new java.sql.Timestamp(timeInMS);
-					pst.setTimestamp(1, sq, Calendar.getInstance());
+					//java.sql.Timestamp sq = new java.sql.Timestamp(timeInMS);
+					pst.setLong(1,timeInMS);
 					pst.setLong(2, Long.parseLong(hashtag));
-					System.out.println(pst.toString());
+					//System.out.println(pst.toString());
 					rs = pst.executeQuery();
 					while (rs.next()) {
-						temp = new tweetObject(rs.getString("message"),Integer.parseInt(rs.getString("sentiment")), rs.getString("name"));
+						temp = new xpressionObject(rs.getString("message"),Integer.parseInt(rs.getString("sentiment")),"", rs.getString("name"),rs.getLong("created_on"));
 						listObjects.add(temp);
 					}
 				} catch (SQLException e1) {

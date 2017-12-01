@@ -1,0 +1,42 @@
+<md-dialog aria-label="Questions" class="userQuestionsModal">
+	<md-toolbar class="md-warn md-hue-2">
+	      <div class="md-toolbar-tools">
+	        <h5>###EVENT NAME GOES HERE###</h5>
+	        <span flex></span>
+	        <md-button class="md-icon-button " ng-click="cancel()">
+	          <md-icon md-svg-icon="close" aria-label="Close Questions"></md-icon>
+	        </md-button>
+	      </div>
+	</md-toolbar>
+	<div class="userQuestionsContainer" layout="row">		
+			<div class="userformContainer userContainer padding-horizontal-10 padding-vertical-10">
+				<div layout="column">
+					<h4>Ask a question</h4>						
+					<textarea placeholder="Write something here..." maxlength="250"
+						ng-model="curUserQuestion" required>
+					</textarea>
+					<br>
+					<md-button class="md-warn md-raised md-hue-2 margin-0" ng-click="askQuestion()">POST</md-button>					
+				</div>
+			</div>
+			<div class="userContainer padding-horizontal-10 padding-vertical-10">
+				<h4>Other Questions</h4>
+				<div class="postedCommentsContainer" id="questionContainer">
+					<div ng-repeat="question in curListQuests" class="card" layout="row" layout-align="start center">
+						<div flex>
+							<div class="cardMessage font-12">{{question.question}}</div>
+						</div>		
+						
+						<!--<div layout="row" layout-align="start center">								
+							<md-button ng-click=""  ng-disabled ="true" class="md-fab md-mini-30 md-warn md-hue-2 margin-0 margin-left-10">
+								<md-icon class="icon-16" md-svg-icon="thumbs_up" aria-label="sentiment"></md-icon>
+							</md-button>
+							<div class="margin-left-10 font-12"> {{question.count}}</div>
+						</div>  -->
+					</div>
+				</div>
+			</div>
+	</div>
+</md-dialog>
+
+

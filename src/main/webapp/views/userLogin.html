@@ -1,20 +1,14 @@
-<div class="userLoginContainer">
-	<div class="headings">Events</div>
-	<div class= "eventListWrapper" layout="row" layout-align="start start">
-		<div class="eventItem" ng-repeat="event in eventList" ng-click="askAccess($event,$index)">
-			<div class="eventName" >
-				{{event.name}}				
-			</div>			
-			<div class="eventSubHead eventDescription">
-					{{event.description}}
-			</div>
-			<div class="eventSubHead eventDate">
-					{{event.created_on | date:'dd/MM/yyyy'}}
-			</div>
-			
-		</div>
-		<span></span>
+<div class="userLoginContainer" layout="column" layout-align="center center">
+	
+	<div class ="headings font-20"  layout="row" layout-align="start center">
+		<div class="normalpart iexpressLogo">I</div>
+		<div class="slantpart iexpressLogo">Express</div>
 	</div>
-	<div><a ui-sref='adminLogin'><md-button class="md-warn md-raised md-hue-2">ADMIN LOGIN</md-button></a></div>
+	
+	<div class="large-size subHeadings">Here goes I-Express description </div>
+	
+	<div><md-button class="md-warn md-raised md-hue-2" ng-click="askAccess($event)">Enter Access Code</md-button></div>
+	<div><a ui-sref='adminLogin'><u>Admin Login</u></a></div>
+	
 </div>
 

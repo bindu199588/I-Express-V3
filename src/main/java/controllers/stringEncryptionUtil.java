@@ -36,8 +36,8 @@ public class stringEncryptionUtil {
             Base64.Encoder encoder = Base64.getEncoder();
             encryptedString = new String(encoder.encode(cipherText),characterEncoding);
             
-            System.out.write(encoder.encode(cipherText));
-            System.out.println(encryptedString);
+            //System.out.write(encoder.encode(cipherText));
+            //System.out.println(encryptedString);
             
             
         } catch (Exception E) {
@@ -59,7 +59,7 @@ public class stringEncryptionUtil {
             cipher.init(Cipher.DECRYPT_MODE, secretKey, ivparameterspec);
             Base64.Decoder decoder = Base64.getDecoder();
             
-            System.out.write(encryptedString.getBytes(characterEncoding));
+            //System.out.write(encryptedString.getBytes(characterEncoding));
             
             byte[] cipherText = decoder.decode(encryptedString.getBytes(characterEncoding));
             decryptedString = new String(cipher.doFinal(cipherText), characterEncoding);

@@ -1,0 +1,73 @@
+<md-dialog aria-label="Agenda" class="agendaModal">
+	<md-toolbar class="md-warn md-hue-2">
+	      <div class="md-toolbar-tools">
+	        <h2>Agenda</h2>
+	        <span flex></span>
+	        <md-button class="md-icon-button" ng-click="cancel()">
+	          <md-icon md-svg-icon="close" aria-label="Close Agenda"></md-icon>
+	        </md-button>
+	      </div>
+	</md-toolbar>
+	<div class="eventAgendaContainer">
+		
+		
+		<md-button class="md-warn md-hue-2 md-raised" ng-click="showAgendaInput = true"  ng-show="!showAgendaInput">+ADD NEW AGENDA</md-button>
+		<div layout="column" ng-show="showAgendaInput" class="modalContainer">
+		  <md-input-container>
+		        <label>Agenda Title</label>
+		        <input ng-model="curAgenda.agenda" required>
+		  </md-input-container>
+		  <md-input-container class="md-input-has-placeholder">
+		    <label>Start Date/Time</label>
+		    <input ng-click="displayDateDialog('start_time')" ng-model="displayTime.start_time"  placeholder="Start Time" >
+		    <!--<input mdc-datetime-picker="" date="true" time="true" type="text"
+		    placeholder="Date" max-date="curAgenda.end_time" ng-model="curAgenda.start_time" class=" md-input"
+		    readonly="readonly" id="input_0">  -->
+		    
+		  </md-input-container>
+		  <md-input-container class="md-input-has-placeholder">
+		    <label>End Date/Time</label>
+		    <input ng-click="displayDateDialog('end_time')" ng-model="displayTime.end_time"  placeholder="Start Time" >
+		    <!--<input mdc-datetime-picker="" date="true" time="true" type="text"
+		    placeholder="Date" min-date="curAgenda.start_time" ng-model="curAgenda.end_time" class=" md-input" 
+		    id="input_1" readonly="readonly">  -->
+		    <!--<div class="md-errors-spacer"></div>  -->
+		  </md-input-container>		  
+		  <div layout="row">
+			 <md-button class="md-warn md-hue-2" ng-click="addNewAgendaItem()">
+	          Add
+	         </md-button>
+	         <md-button class="md-warn md-hue-2" ng-click="cancelAgendaInput()">
+	          Cancel
+	         </md-button>				  	
+		  </div>
+		</div>
+		<div layout="column">
+			<md-card ng-repeat="permAgenda in savedAgendaList" class="agendaCard" layout="row" layout="start center">
+		        <div class="agendaTime agendaComponent" layout="column">
+					<div class="date">{{permAgenda.start_time | date: 'dd MMM'}}</div>
+					<div class="time">{{permAgenda.start_time | date: 'hh:mm a'}}</div>
+				</div>
+				<div class="agendaTitle">
+					{{permAgenda.agenda}}
+				</div>
+		    </md-card>
+		</div>
+		<div layout="column">
+			<md-card ng-repeat="tempAgenda in unsavedAgendaList" class="agendaCard greyout" layout="row" layout="start center">
+		        <div class="agendaTime agendaComponent" layout="column">
+					<div class="date">{{tempAgenda.start_time | date: 'dd MMM'}}</div>
+					<div class="time">{{tempAgenda.start_time | date: 'hh:mm a'}}</div>
+				</div>
+				<div class="agendaTitle">
+					{{tempAgenda.agenda}}
+				</div>
+		    </md-card>
+			
+		</div>
+		<div layout="row">
+			<md-button class="md-warn md-hue-2 md-raised" ng-click="saveAgenda()">SAVE</md-button>
+			<md-button class="md-raised" ng-click="cancel()">CLOSE</md-button>		
+		</div>
+	</div>
+</md-dialog>

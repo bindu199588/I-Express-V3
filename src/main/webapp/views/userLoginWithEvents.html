@@ -1,0 +1,26 @@
+<div class="userLoginContainer">
+	<div layout="row" layout-align="start center">
+		<div class="headings font-20" style="">Events</div>
+		<span flex></span>
+		<div><a ui-sref='adminLogin'><u>Admin Login</u></a></div>
+	</div>
+	
+	
+	<div class= "eventListWrapper" layout="row" layout-align="start start">
+		<div class="eventItem" ng-repeat="event in eventList" ng-click="askAccess($event,$index)">
+			<div class="eventName" >
+				{{event.name}}				
+			</div>			
+			<div class="eventSubHead eventDescription">
+					{{event.description}}
+			</div>
+			<div class="eventSubHead eventDate">
+					{{event.created_on | date:'dd/MM/yyyy'}}
+			</div>
+			
+		</div>
+		<span></span>
+	</div>
+	
+</div>
+
