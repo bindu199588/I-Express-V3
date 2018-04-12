@@ -1,7 +1,7 @@
 <md-dialog aria-label="Questions" class="userQuestionsModal">
 	<md-toolbar class="md-warn md-hue-2">
 	      <div class="md-toolbar-tools">
-	        <h5>###EVENT NAME GOES HERE###</h5>
+	        <h5 class="font-20">Questions - <b>{{eventData.name}}</b></h5>
 	        <span flex></span>
 	        <md-button class="md-icon-button " ng-click="cancel()">
 	          <md-icon md-svg-icon="close" aria-label="Close Questions"></md-icon>
@@ -24,7 +24,7 @@
 				<div class="postedCommentsContainer" id="questionContainer">
 					<div ng-repeat="question in curListQuests" class="card" layout="row" layout-align="start center">
 						<div flex>
-							<div class="cardMessage font-12">{{question.question}}</div>
+							<div class="cardMessage font-16">{{question.question}}</div>
 						</div>		
 						
 						<!--<div layout="row" layout-align="start center">								

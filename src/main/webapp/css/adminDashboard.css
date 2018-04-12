@@ -69,7 +69,7 @@
 
 
 .agendaModal{
-	width:376px;
+	width:500px;
 }
 
 .eventAgendaContainer{
@@ -87,17 +87,29 @@
 }
 
 .agendaTime .time{
-	height:60px;
-	padding: 10px;
-	background-color:#c80000;
+	flex: 1;
+    padding: 10px;
+    background-color: #c80000;
+    height: 75px;
 }
 
 .agendaTitle{
 	background-color: lightgrey;
 	width:70%;
 	padding:10px;
+	height:145px;
+	word-wrap:break-word;
 }
 
+.agendaTitle .endTiming{
+	color:#616161;
+	font-size:14px;
+	height:35px;
+}
+
+.agendaTitle .endTiming>*{
+	margin:0px 10px;
+}
 
 .greyout .agendaTime .date{
 	background-color:#ababab;

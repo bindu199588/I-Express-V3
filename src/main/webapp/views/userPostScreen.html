@@ -36,14 +36,13 @@
 			<div ng-repeat="tweet in curListTweets" class="card" layout="row" layout-align="space-between center">
 				<div flex>
 					<!--<div class="cardTitle">{{tweet.tag_id}}</div>  -->
-					<div class="cardMessage font-12">{{tweet.message}}</div>
+					<div class="cardMessage font-16">{{tweet.message}}</div>
 				</div>			
 				<div class="emojiWrapper -{{emoList[tweet.sentiment].name}}">
 					<md-icon class="icon-30 padding-horzontal-10 margin-left-10" md-svg-icon="{{emoList[tweet.sentiment].icon}}" aria-label="sentiment"></md-icon>
 				</div>
 			</div>
-		</div>
-		
+		</div>		
 	</div>
 	
 </div>

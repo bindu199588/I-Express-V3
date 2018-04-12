@@ -6,11 +6,12 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import dataObjects.PrivateStringObject;
 
 @Controller
 public class stringEncryptionUtil {
@@ -21,7 +22,7 @@ public class stringEncryptionUtil {
     private static final String aesEncryptionAlgorithem = "AES";
 	@RequestMapping(value = "/encryptString",  produces = "text/plain;charset=UTF-8")
 	@ResponseBody
-	public String encryptString(@RequestBody String plainString){
+	public String encryptString(@RequestBody PrivateStringObject plainString){
 		String encryptedString = "";
 		try {
             Cipher cipher   = Cipher.getInstance(cipherTransformation);
@@ -29,7 +30,7 @@ public class stringEncryptionUtil {
             SecretKeySpec secretKey = new SecretKeySpec(key, aesEncryptionAlgorithem);
             IvParameterSpec ivparameterspec = new IvParameterSpec(key);
             cipher.init(Cipher.ENCRYPT_MODE, secretKey, ivparameterspec);
-            byte[] cipherText = cipher.doFinal(plainString.getBytes(characterEncoding));
+            byte[] cipherText = cipher.doFinal(plainString.getSecretString().getBytes(characterEncoding));
             
             //System.out.write(cipherText);
             
@@ -48,7 +49,7 @@ public class stringEncryptionUtil {
 	
 	@RequestMapping(value = "/decryptString", produces = "text/plain;charset=UTF-8")
 	@ResponseBody
-	public String decryptString(@RequestBody String encryptedString){
+	public String decryptString(@RequestBody PrivateStringObject encryptedString){
 		String decryptedString = "";
 		try {
 			
@@ -61,7 +62,7 @@ public class stringEncryptionUtil {
             
             //System.out.write(encryptedString.getBytes(characterEncoding));
             
-            byte[] cipherText = decoder.decode(encryptedString.getBytes(characterEncoding));
+            byte[] cipherText = decoder.decode(encryptedString.getSecretString().getBytes(characterEncoding));
             decryptedString = new String(cipher.doFinal(cipherText), characterEncoding);
 
         } catch (Exception E) {

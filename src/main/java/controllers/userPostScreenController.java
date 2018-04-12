@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import dataObjects.tagEmoPercentObject;
 import dataObjects.xpressionObject;
@@ -98,7 +97,7 @@ public class userPostScreenController extends indexController{
 			@RequestParam(value = "hashTag") String hashtag) throws ClassNotFoundException, SQLException {
 		
 		ResultSet rs;
-		xpressionObject temp;
+		
 		List<xpressionObject> listObjects = new ArrayList<xpressionObject>();
 		String jsonString = "";
 
@@ -108,26 +107,18 @@ public class userPostScreenController extends indexController{
 				try {
 					String selectQuery = "select xpression.message,xpression.sentiment,tag.name,floor(extract(epoch from xpression.created_on)*1000) as created_on from xpression,tag where date(xpression.created_on) >= date(now()) and floor(extract(epoch from xpression.created_on)*1000) > ? and tag_id=tag.id and tag.id=? order by xpression.created_on";
 					PreparedStatement pst = con.prepareStatement(selectQuery);
-					//java.sql.Timestamp sq = new java.sql.Timestamp(timeInMS);
 					pst.setLong(1,timeInMS);
-					pst.setLong(2, Long.parseLong(hashtag));
-					//System.out.println(pst.toString());
+					pst.setLong(2, Long.parseLong(hashtag));					
 					rs = pst.executeQuery();
-					while (rs.next()) {
-						temp = new xpressionObject(rs.getString("message"),Integer.parseInt(rs.getString("sentiment")),"", rs.getString("name"),rs.getLong("created_on"));
-						listObjects.add(temp);
+					while (rs.next()) {						
+						listObjects.add(new xpressionObject(rs.getString("message"),Integer.parseInt(rs.getString("sentiment")),"", rs.getString("name"),rs.getLong("created_on")));
 					}
 				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-
-				ObjectMapper mapper = new ObjectMapper();
-
 				try {
 					jsonString = mapper.writeValueAsString(listObjects);
 				} catch (JsonProcessingException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 

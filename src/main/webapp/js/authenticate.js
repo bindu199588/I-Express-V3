@@ -1,18 +1,13 @@
 var app= angular.module("iexpress");
 app.run(function($transitions,UserAuthenticationService,$mdDialog) {
 		$transitions.onBefore({}, function(transition) {
-//			return new Promise((resolve,reject) => {
-//				return resolve(true);
-//			})
 			return new Promise((resolve,reject) => {
-//				console.log('came to authenticate')
 				toState = transition.to();
 				var toParams = Object.assign({}, transition.params());
 				
 				var stateService = transition.router.stateService;
 				if(toState.authenticate){
 					if(toState.isAdmin){
-//						console.log("HERE IN ADMIN DASHBOARD");
 						UserAuthenticationService.isLoggedInAdmin()
 				        .then(response => {
 				    		if(!response){
@@ -25,17 +20,14 @@ app.run(function($transitions,UserAuthenticationService,$mdDialog) {
 				        .catch(err => console.log(err))
 					}
 					else{
-//						console.log(toParams)
 						if(toParams.eventData!=null && toParams.eventData != ""){
 							return resolve(true);
 						}
 						else{
-//							console.log("PARAMS NOT PRESENT")
 							UserAuthenticationService.checkEventLogin()
 						      .then(eventData => {
 								if(eventData != null && eventData!=""){		 
 									toParams.eventData = eventData;
-//									console.log(toParams)
 									return resolve(stateService.target(transition.to().name, toParams));
 								}
 								else{
@@ -64,7 +56,6 @@ app.run(function($transitions,UserAuthenticationService,$mdDialog) {
 				}
 				else{
 					if(toState.isAdmin){
-//						console.log("HERE IN ADMIN LOGIN");
 						UserAuthenticationService.isLoggedInAdmin()
 				        .then(response => {
 				    		if(response){
@@ -76,12 +67,9 @@ app.run(function($transitions,UserAuthenticationService,$mdDialog) {
 				        })
 					}
 					else{
-//						console.log("HERE IN USER LOGIN");
 						UserAuthenticationService.checkEventLogin()
 					      .then(eventData => {
-//					    	  console.log(eventData);
 					    	  if(eventData != null && eventData != ""){	
-//					    		  console.log("HERE")
 					    		  return resolve(stateService.target("userDashboard",{eventData:eventData}));
 					    	  }
 					    	  else{

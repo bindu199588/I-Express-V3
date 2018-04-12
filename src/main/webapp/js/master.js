@@ -38,14 +38,20 @@ app.factory('UserAuthenticationService',function($http,$state,$q){
 	var thisFactory = {};
 	
 	thisFactory.encryptCookie = function(cookieString){	
-		return $http.post("rest/encryptString",cookieString)
+		var config ={
+				secretString : cookieString
+		}
+		return $http.post("rest/encryptString",config)
 		.then(response => {
 			return response.data;
 		})
 		.catch(err => console.log("ERROR IN ENCRYPTION"+err))
 	}
 	thisFactory.decryptCookie = function(cookieString){
-		return $http.post("rest/decryptString",cookieString)
+		var config ={
+				secretString : cookieString
+		}
+		return $http.post("rest/decryptString",config)
 		.then(response => {
 			return response.data
 			
@@ -107,10 +113,13 @@ app.factory('UserAuthenticationService',function($http,$state,$q){
 		return;
 	}	
 	thisFactory.loginUser = function(access_code){
+		var config ={
+				secretString: access_code
+		}
 		return $http({
 		    method: 'POST',
 		    url: 'rest/loginUser',
-		    data: access_code
+		    data: config
 		})
 		.then(function(response){
 			if(response.data && response.data!=""){
@@ -145,7 +154,6 @@ app.factory('UserAuthenticationService',function($http,$state,$q){
 			if(response.data){
 				return thisFactory.setLoginCookie(username,true)
 				.then(result=>{
-					//console.log('here in loginAdmin')
 					return true;
 				},(err)=>{
 					console.log(err)
@@ -165,7 +173,6 @@ app.factory('UserAuthenticationService',function($http,$state,$q){
 			return thisFactory.getLoginCookie(true)
 			.then(response =>{
 				var existingCookie = response;
-				//console.log(existingCookie)
 				if(existingCookie!=null && existingCookie !=""){
 					return resolve(true);
 				}
@@ -226,6 +233,7 @@ app.controller("adminDashboardCtrl",function($scope,$http,$state,$mdDialog,pageL
 		}
 		else{
 	    	$scope.isAdmin = true
+	    	$scope.activeTagForDownload = null
 	    	$scope.logout = function(){
 	    		if(UserAuthenticationService.logout($scope.isAdmin)){
 	    			$state.go("adminLogin",{},{location:false});
@@ -418,6 +426,43 @@ app.controller("adminDashboardCtrl",function($scope,$http,$state,$mdDialog,pageL
 				});
 			}
 			
+			var downloadDataAsFile = function(data,fileName){
+			   var a = document.createElement('a');
+			   a.href = 'data:attachment/csv;charset=utf-8,' + encodeURI(data);
+			   a.target = '_blank';
+			   a.download = fileName;
+			   document.body.appendChild(a);
+			   a.click();
+			}
+			$scope.downloadComments = function(){
+				if($scope.activeTagForDownload){
+					var tagId = $scope.activeTagForDownload['id']
+					var tagName = $scope.activeTagForDownload['name'].trim()
+				}
+				var config = {
+						params:{
+							eventId : $scope.activeEvent['id'],
+							tagId :   tagId || null
+						}
+				}
+				$http.get("rest/exportComments",config)
+				.then(response => {
+					var fileName = 'CommentsList-['+ $scope.activeEvent['name'].trim() + '][' + (tagName || 'allTags') +'].txt';
+					downloadDataAsFile(response.data,fileName);
+				});
+			}
+			$scope.downloadQuestions = function(){
+				var config = {
+						params:{
+							eventId : $scope.activeEvent['id']
+						}
+				}
+				$http.get("rest/exportQuestions",config)
+				.then(response => {
+					var fileName = 'QuestionsList-['+ $scope.activeEvent['name'].trim() + '].txt';
+					downloadDataAsFile(response.data,fileName);
+				});
+			}
 		}
 	})
 	.catch(err=>console.log(err))
@@ -856,7 +901,6 @@ app.controller('adminEventAgendaModalCtrl',function($scope,$mdDialog,$http,$filt
 	$scope.savedAgendaList = [];
 	$scope.curAgenda = {};
 	$scope.displayTime = {}
-	//$scope.curAgendaStartTime,curAgendEndTime,curAgendaDescription
 	$scope.hide = function() {
 	      $mdDialog.hide();
 	};
@@ -880,15 +924,17 @@ app.controller('adminEventAgendaModalCtrl',function($scope,$mdDialog,$http,$filt
 		}
 	}
 	$scope.displayDateDialog = function (nameOfTime) {
+		var timeNow = new Date();
 		if(nameOfTime == 'start_time'){
-			var config = {
+			var config = {					
+			  minDate: $scope.curAgenda.start_time || new Date(timeNow.getFullYear(),timeNow.getMonth()-1,timeNow.getDate()),
 	          maxDate: $scope.curAgenda.end_time,
 	          time: true
 			}
 		}
-		else if(nameOfTime == 'end_time'){
+		else if(nameOfTime == 'end_time'){			
 			var config = {			          
-	          minDate: $scope.curAgenda.start_time,
+	          minDate: $scope.curAgenda.start_time || new Date(timeNow.getFullYear(),timeNow.getMonth()-1,timeNow.getDate()),
 	          time: true
 			}
 		}
@@ -902,7 +948,8 @@ app.controller('adminEventAgendaModalCtrl',function($scope,$mdDialog,$http,$filt
    }
 	
 	$scope.cancelAgendaInput = function(){
-			$scope.displayTime = {}
+			$scope.curAgenda = {};
+			$scope.displayTime ={};
 			$scope.showAgendaInput = false
 	}
 	
@@ -924,7 +971,6 @@ app.controller('adminEventAgendaModalCtrl',function($scope,$mdDialog,$http,$filt
 		$http.get('rest/loadEventAgenda',config)
 		.then(response =>{
 			$scope.savedAgendaList = response.data;
-			//console.log($scope.savedAgendaList);
 		})
 	}
 	$scope.getEventAgenda();
@@ -955,6 +1001,7 @@ app.controller('userEventAgendaModalCtrl',function($scope,$mdDialog,$http,eventD
 });
 
 app.controller('userQuestionsModalCtrl',function($scope,$mdDialog,$interval,$http,$q,$timeout,eventData){
+	$scope.eventData = eventData;
 	$scope.hide = function() {
 	      $mdDialog.hide();
 	};	

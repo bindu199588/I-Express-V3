@@ -11,8 +11,8 @@
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 	
-	<!-- 
-	<security-constraint>
+	 
+	<!--<security-constraint>
 	    <web-resource-collection>
 	        <web-resource-name>securedapp</web-resource-name>
 	        <url-pattern>/*</url-pattern>
@@ -20,8 +20,8 @@
 	    <user-data-constraint>
 	        <transport-guarantee>CONFIDENTIAL</transport-guarantee>
 	    </user-data-constraint>
-	</security-constraint>	
-	 -->
+	</security-constraint>	-->
+	 
 	
 
 	<servlet-mapping>

@@ -1,15 +1,20 @@
 package controllers;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.naming.NamingException;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 
+import org.postgresql.PGConnection;
+import org.postgresql.copy.CopyManager;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,7 +28,6 @@ import dataObjects.countAtDateObject;
 import dataObjects.eventAgendaObject;
 import dataObjects.eventObject;
 import dataObjects.tagObject;
-import dataObjects.userLoginObject;
 
 @Controller
 public class adminDashBoardController extends indexController{
@@ -75,13 +79,18 @@ public class adminDashBoardController extends indexController{
 	public boolean addEventAgenda(@RequestBody List<eventAgendaObject> agendaList) throws ClassNotFoundException, SQLException{
 		try(Connection con = db.getConnection()){
 			if(con!=null){
-				StringBuilder sb = new StringBuilder("insert into eventagenda(agenda,start_time,end_time,event_id) values(?,?,?,?)");
+				StringBuilder sb = new StringBuilder("insert into eventagenda(agenda,start_time,event_id,end_time) values(?,?,?,?)");
 				PreparedStatement pst = con.prepareStatement(sb.toString());
 				for(eventAgendaObject agendaObject : agendaList){
 					pst.setString(1, agendaObject.getAgenda());
 					pst.setTimestamp(2, new java.sql.Timestamp(agendaObject.getStart_time()));
-					pst.setTimestamp(3, new java.sql.Timestamp(agendaObject.getEnd_time()));
-					pst.setLong(4, agendaObject.getEvent_id());
+					pst.setLong(3, agendaObject.getEvent_id());
+					if(agendaObject.getEnd_time()!=null){
+						pst.setTimestamp(4, new java.sql.Timestamp(agendaObject.getEnd_time()));	
+					}
+					else{
+						pst.setNull(4, Types.TIMESTAMP);
+					}
 					pst.executeUpdate();
 				}
 				return true;
@@ -101,8 +110,16 @@ public class adminDashBoardController extends indexController{
 				PreparedStatement pst = con.prepareStatement(sb.toString());
 				pst.setLong(1,eventId);
 				rs = pst.executeQuery();
+				eventAgendaObject tempEventAgenda ;
 				while(rs.next()){
-					agendaList.add(new eventAgendaObject(rs.getInt("id"),rs.getString("agenda"),rs.getTimestamp("start_time").getTime(),rs.getTimestamp("end_time").getTime(),rs.getLong("event_id"),0L));
+					tempEventAgenda = new eventAgendaObject();
+					tempEventAgenda.setAgenda(rs.getString("agenda"));
+					tempEventAgenda.setStart_time(rs.getTimestamp("start_time").getTime());
+					tempEventAgenda.setEvent_id(rs.getLong("event_id"));
+					if(rs.getTimestamp("end_time")!=null){
+						tempEventAgenda.setEnd_time(rs.getTimestamp("end_time").getTime());
+					}
+					agendaList.add(tempEventAgenda);
 				}
 				return mapper.writeValueAsString(agendaList);
 			}
@@ -279,7 +296,6 @@ public class adminDashBoardController extends indexController{
 						pst.setLong(2, eventId);
 						pst.setInt(3, sentiment);
 					}
-					//System.out.println(pst.toString());
 					rs = pst.executeQuery();
 					while(rs.next()){
 						cb = new countAtDateObject(rs.getLong("count"),rs.getDate("date").getTime());
@@ -293,4 +309,68 @@ public class adminDashBoardController extends indexController{
 		return jsonString;
 	}
 	
+	@RequestMapping(value = "/exportComments")
+	public void getTagDataCSV(HttpServletResponse response,@RequestParam(value="eventId") Long eventId,@RequestParam(value="tagId",required = false) Long tagId) throws ClassNotFoundException, IOException, SQLException{
+		try(Connection con = db.getConnection()){
+			//PgConnection copyOperationConnection = (PgConnection) connection;
+			//PGConnection pgCon = con.unwrap(PGConnection.class);
+			CopyManager cpm = ((PGConnection) con).getCopyAPI();
+			
+			ServletOutputStream outStream = response.getOutputStream();
+			
+			String mimetype = "application/octet-stream";
+	        String fileName = "CommentList.csv";
+	        response.setContentType(mimetype);	        
+		    response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
+		    
+		    StringBuilder sb = new StringBuilder("COPY (select tag.name as tagname,tag.description,regexp_replace(regexp_replace(message,'\\n',' ','g'),'\\|',' ','g') as message,sentiment.sentiment,xpression.created_on ");
+		    sb.append(" from tag join xpression on tag.id = xpression.tag_id ");
+		    sb.append(String.format(" and tag.event_id = %d", eventId));
+		    if(tagId !=null){
+		    	sb.append(String.format(" and tag.id = %d",tagId));
+		    }
+		    sb.append(" join sentiment on xpression.sentiment = sentiment.id");		    
+		    sb.append(") TO STDOUT WITH CSV HEADER DELIMITER '|'");
+	    	try{
+	    		cpm.copyOut(sb.toString(),outStream);
+	    	}
+	    	catch(Exception er){
+	    		System.out.println("HERE IS THE COPYERROR");
+	    		System.out.println(er);
+	    	}
+	        outStream.close();
+		}
+		
+	}
+	
+	@RequestMapping(value = "/exportQuestions")
+	public void getQuestionDataCSV(HttpServletResponse response,@RequestParam(value="eventId") Long eventId) throws ClassNotFoundException, IOException, SQLException{
+		try(Connection con = db.getConnection()){
+			//PgConnection copyOperationConnection = (PgConnection) connection;
+			//PGConnection pgCon = con.unwrap(PGConnection.class);
+			CopyManager cpm = ((PGConnection) con).getCopyAPI();
+			
+			ServletOutputStream outStream = response.getOutputStream();
+			
+			String mimetype = "application/octet-stream";
+	        String fileName = "QuestionList.csv";
+	        response.setContentType(mimetype);	        
+		    response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
+		    
+		    String queryString = String.format("select regexp_replace(regexp_replace(question,'\\n',' ','g'),'\\|',' ','g') as question,likecounter,created_on from question where event_id = %d", eventId);
+		    StringBuilder sb = new StringBuilder("COPY (");
+		    sb.append(queryString);
+		    sb.append(") TO STDOUT WITH CSV HEADER DELIMITER '|'");		    
+		    
+	    	try{
+	    		cpm.copyOut(sb.toString(),outStream);
+	    	}
+	    	catch(Exception er){
+	    		System.out.println("HERE IS THE COPYERROR");
+	    		System.out.println(er);
+	    	}
+	        outStream.close();
+		}
+		
+	}
 }

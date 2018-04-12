@@ -43,10 +43,14 @@
 .userformContainer>div{
 	max-width: 650px;
 }
+/*
+.userQuestionsModal{
+	background-color:#f4f4f4;
+}*/
 .postedCommentsContainer .card{
 	margin-bottom: 16px;
-    background-color: #f7f7f7;
-    padding: 5px 16px;
+    background-color: #fafafa;
+    padding: 10px 16px;
     box-shadow: 5px 5px 15px #ccc;
     border-radius: 30px;
     width: fit-content;  

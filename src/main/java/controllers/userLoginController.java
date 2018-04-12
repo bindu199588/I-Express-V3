@@ -16,8 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+
+import dataObjects.PrivateStringObject;
 import dataObjects.eventObject;
-import dataObjects.userLoginObject;
 
 @Controller
 public class userLoginController extends indexController{
@@ -51,13 +52,13 @@ public class userLoginController extends indexController{
 	
 	@RequestMapping(value="/loginUser", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public String loginUser(@RequestBody String accessCode) throws ClassNotFoundException, SQLException, JsonProcessingException{
+	public String loginUser(@RequestBody PrivateStringObject accessCode) throws ClassNotFoundException, SQLException, JsonProcessingException{
 		ResultSet rs;
 		try(Connection con = db.getConnection()){
 			if(con!=null){
 				StringBuilder sb = new StringBuilder("select id,name,description from event where access_code = ? and is_active = true");
 				PreparedStatement pst = con.prepareStatement(sb.toString());
-				pst.setString(1, accessCode);
+				pst.setString(1, accessCode.getSecretString());
 				rs = pst.executeQuery();
 				if(rs.next()){
 					eventObject event = new eventObject(rs.getInt("id"), rs.getString("name"), rs.getString("description"), true);

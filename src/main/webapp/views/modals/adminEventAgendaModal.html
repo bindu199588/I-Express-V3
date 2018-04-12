@@ -8,9 +8,7 @@
 	        </md-button>
 	      </div>
 	</md-toolbar>
-	<div class="eventAgendaContainer">
-		
-		
+	<div class="eventAgendaContainer">		
 		<md-button class="md-warn md-hue-2 md-raised" ng-click="showAgendaInput = true"  ng-show="!showAgendaInput">+ADD NEW AGENDA</md-button>
 		<div layout="column" ng-show="showAgendaInput" class="modalContainer">
 		  <md-input-container>
@@ -27,7 +25,7 @@
 		  </md-input-container>
 		  <md-input-container class="md-input-has-placeholder">
 		    <label>End Date/Time</label>
-		    <input ng-click="displayDateDialog('end_time')" ng-model="displayTime.end_time"  placeholder="Start Time" >
+		    <input ng-click="displayDateDialog('end_time')" ng-model="displayTime.end_time"  placeholder="End Time" >
 		    <!--<input mdc-datetime-picker="" date="true" time="true" type="text"
 		    placeholder="Date" min-date="curAgenda.start_time" ng-model="curAgenda.end_time" class=" md-input" 
 		    id="input_1" readonly="readonly">  -->
@@ -42,29 +40,45 @@
 	         </md-button>				  	
 		  </div>
 		</div>
+		<
 		<div layout="column">
 			<md-card ng-repeat="permAgenda in savedAgendaList" class="agendaCard" layout="row" layout="start center">
 		        <div class="agendaTime agendaComponent" layout="column">
-					<div class="date">{{permAgenda.start_time | date: 'dd MMM'}}</div>
+		        	
+					<div class="date font-24">{{permAgenda.start_time | date: 'dd MMM'}}</div>
 					<div class="time">{{permAgenda.start_time | date: 'hh:mm a'}}</div>
 				</div>
-				<div class="agendaTitle">
-					{{permAgenda.agenda}}
+				
+				<div class="agendaTitle" layout = "column">					
+					<div flex layout="row">
+					 	<div flex class="spill-x-hidden spill-y-scroll" >{{permAgenda.agenda}}</div>						
+						<div layout="column">
+							<md-button class="md-icon-button margin-0" ng-click="editAgendaSaved()">
+							  <md-tooltip md-direction="bottom">Edit Agenda</md-tooltip>
+					          <md-icon md-svg-icon="edit" aria-label="Edit Agenda"></md-icon>
+					        </md-button>
+							<md-button class="md-icon-button margin-0" ng-click="deleteAgendaSaved()">
+							  <md-tooltip md-direction="bottom">Delete Agenda</md-tooltip>
+					          <md-icon md-svg-icon="close" aria-label="Delete Agenda"></md-icon>
+					        </md-button>					        
+				        </div>
+				       
+					</div>
+					<div ng-show ="permAgenda.end_time" class="endTiming padding-vertical-10" layout = "row" layout-align="start center">
+						<md-icon class="margin-0" md-svg-icon="clock" aria-label="Schedule"></md-icon>
+						<div>
+							Ends At 
+						</div>
+						<div> - </div>
+						<div layout="row"><b>
+							<span>{{permAgenda.end_time | date: 'dd MMM yy '}}</span>
+							<span>{{permAgenda.end_time | date: 'hh:mm a'}}</span></b>
+						</div>
+					</div>
 				</div>
 		    </md-card>
 		</div>
-		<div layout="column">
-			<md-card ng-repeat="tempAgenda in unsavedAgendaList" class="agendaCard greyout" layout="row" layout="start center">
-		        <div class="agendaTime agendaComponent" layout="column">
-					<div class="date">{{tempAgenda.start_time | date: 'dd MMM'}}</div>
-					<div class="time">{{tempAgenda.start_time | date: 'hh:mm a'}}</div>
-				</div>
-				<div class="agendaTitle">
-					{{tempAgenda.agenda}}
-				</div>
-		    </md-card>
-			
-		</div>
+		<event-agenda is-admin="true" grey-out="true" agenda="tempAgenda"></event-agenda>
 		<div layout="row">
 			<md-button class="md-warn md-hue-2 md-raised" ng-click="saveAgenda()">SAVE</md-button>
 			<md-button class="md-raised" ng-click="cancel()">CLOSE</md-button>		

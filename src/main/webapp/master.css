@@ -1,7 +1,7 @@
 @import url("css/adminDashboard.css");
-@import url("css/adminLogin.css");
+/*@import url("css/adminLogin.css");*/
 @import url("css/userDashboard.css");
-@import url("css/userLogin.css");
+/*@import url("css/userLogin.css");*/
 @import url("css/userPostScreen.css");
 @import url("css/iexpressLoader.css");
 @import url("css/iexpressHeader.css");
@@ -25,14 +25,22 @@
 }
 
 .mainContainer{
-	/*padding:10px;*/
-	height: calc(100vh - 70px);
+	padding:10px 0px;
+	height: calc(100vh - 90px);
 	overflow-y: scroll;
 	font-size:14px;
+	/*background-color:#f4f4f4;*/
 }
-
+.md-dialog-container {
+	height:inherit!important;
+}
 .modalContainer{
 	padding:20px;
+}
+
+.userLoginContainer{
+	text-align:center;
+	height:100%;
 }
 
 a{
@@ -57,13 +65,8 @@ a:hover{
 	padding: 0px 8px;
     text-transform: capitalize;
 }
-.subHeadings{
-	color:lightgrey;
-}
-
-.subText{
-	color:lightgrey;
-	
+.subHeadings, .subText{
+	color:#818181;/*#a4a4a4;*/
 }
 button{
 	width:fit-content;
@@ -142,4 +145,16 @@ button{
 .padding-vertical-10{
 	padding-top:10px;
 	padding-bottom:10px;
+}
+.spill-x-hidden{
+	overflow-x:hidden;
+}
+.spill-y-hidden{
+	overflow-y:hidden;
+}
+.spill-x-scroll{
+	overflow-x:scroll;
+}
+.spill-y-scroll{
+	overflow-y:scroll;
 }

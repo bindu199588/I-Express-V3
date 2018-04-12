@@ -24,7 +24,7 @@
 			<h4 ng-show="activeEvent.showAccess">Access Code - {{activeEvent.access_code}}</h4>
 			<div layout= "row" layout-align="start center" style="width:100%;">
 				<span flex></span>				
-		        <a class="md-warn md-hue-2" ng-click = "">
+		        <a class="md-warn md-hue-2" ng-click = "downloadQuestions()">
 			        <md-icon class="md-warn icon-30"  md-svg-icon="download" aria-label="Download Questions"></md-icon>
 			        <span>Download Questions</span>
 		        </a>
@@ -32,14 +32,14 @@
 			<div layout= "row" layout-align="start center" style="width:100%;">
 				<md-input-container flex>
 		          <label>Select Tag</label>
-		          <md-select ng-model="activeTagIdDownload">
+		          <md-select ng-model="activeTagForDownload">
 		            <md-option ng-value="null"><em>ALL TAGS</em></md-option>
-		            <md-option ng-repeat="tag in tagsList" ng-value="tag.id">
+		            <md-option ng-repeat="tag in tagsList" ng-value="tag">
 		              {{tag.name}}
 		            </md-option>
 		          </md-select>
 		        </md-input-container>		        
-		        <a class="md-warn md-hue-2"  ng-click = "">
+		        <a class="md-warn md-hue-2"  ng-click = "downloadComments()">
 		        	<md-icon class="md-warn icon-30"  md-svg-icon="download" aria-label="Download Comments"></md-icon>
 		        	<span>Download Comments</span>
 		        </a>
